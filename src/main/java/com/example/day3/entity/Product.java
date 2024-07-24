@@ -12,7 +12,6 @@ public class Product {
     private Long id;
     private String name;
 
-    // Getters ve Setters
     public Long getId() {
         return id;
     }
@@ -29,7 +28,6 @@ public class Product {
         this.name = name;
     }
 
-    // No-argument constructor
     public Product() {
     }
 }
