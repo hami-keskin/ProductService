@@ -28,6 +28,7 @@ public class ProductService {
         Product product = productRepository.findById(id).orElse(null);
         if (product != null) {
             product.setName(productDetails.getName());
+            product.setCatalog(productDetails.getCatalog());
             return productRepository.save(product);
         } else {
             return null;
@@ -38,7 +39,6 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-    // Tüm ürünleri silen yöntem
     public void deleteAllProducts() {
         productRepository.deleteAll();
     }

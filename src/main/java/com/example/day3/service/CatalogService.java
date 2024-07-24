@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CatalogService {
@@ -17,19 +16,22 @@ public class CatalogService {
         return catalogRepository.save(catalog);
     }
 
-    public Optional<Catalog> getCatalogById(Long id) {
-        return catalogRepository.findById(id);
+    public Catalog getCatalogById(Long id) {
+        return catalogRepository.findById(id).orElse(null);
     }
 
     public List<Catalog> getAllCatalogs() {
         return catalogRepository.findAll();
     }
 
-    public Optional<Catalog> updateCatalog(Long id, Catalog catalogDetails) {
-        return catalogRepository.findById(id).map(catalog -> {
+    public Catalog updateCatalog(Long id, Catalog catalogDetails) {
+        Catalog catalog = catalogRepository.findById(id).orElse(null);
+        if (catalog != null) {
             catalog.setName(catalogDetails.getName());
             return catalogRepository.save(catalog);
-        });
+        } else {
+            return null;
+        }
     }
 
     public void deleteCatalog(Long id) {
