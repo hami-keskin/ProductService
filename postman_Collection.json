@@ -1,7 +1,7 @@
 {
     "info": {
-        "name": "Product API",
-        "description": "Collection of Product API endpoints",
+        "name": "Product and Catalog API",
+        "description": "Collection of Product and Catalog API endpoints",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
     },
     "item": [
@@ -140,6 +140,145 @@
                     "port": "8080",
                     "path": [
                         "products"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Create Catalog",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"name\": \"Catalog1\"\n}",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    }
+                },
+                "url": {
+                    "raw": "http://localhost:8080/catalogs",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8080",
+                    "path": [
+                        "catalogs"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Get Catalog By ID",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "http://localhost:8080/catalogs/1",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8080",
+                    "path": [
+                        "catalogs",
+                        "1"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Get All Catalogs",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "http://localhost:8080/catalogs",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8080",
+                    "path": [
+                        "catalogs"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Update Catalog",
+            "request": {
+                "method": "PUT",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"name\": \"Updated Catalog\"\n}",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    }
+                },
+                "url": {
+                    "raw": "http://localhost:8080/catalogs/1",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8080",
+                    "path": [
+                        "catalogs",
+                        "1"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Delete Catalog",
+            "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                    "raw": "http://localhost:8080/catalogs/1",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8080",
+                    "path": [
+                        "catalogs",
+                        "1"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Delete All Catalogs",
+            "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                    "raw": "http://localhost:8080/catalogs",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8080",
+                    "path": [
+                        "catalogs"
                     ]
                 }
             }
