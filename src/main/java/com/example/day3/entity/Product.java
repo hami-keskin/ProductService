@@ -1,5 +1,6 @@
 package com.example.day3.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,8 +15,10 @@ public class Product {
     private String name;
 
     @ManyToOne
+    @JsonBackReference
     private Catalog catalog;
 
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -40,6 +43,7 @@ public class Product {
         this.catalog = catalog;
     }
 
+    // No-argument constructor
     public Product() {
     }
 }

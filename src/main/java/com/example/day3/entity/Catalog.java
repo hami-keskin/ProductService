@@ -1,5 +1,6 @@
 package com.example.day3.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,8 +16,10 @@ public class Catalog {
     private String name;
 
     @OneToMany(mappedBy = "catalog")
+    @JsonManagedReference
     private List<Product> products;
 
+    // Getters and Setters
     public Long getId() {
         return id;
     }
