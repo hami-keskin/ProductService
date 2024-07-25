@@ -1,8 +1,8 @@
 package com.example.day3.service;
 
 import com.example.day3.dto.CatalogDto;
-import com.example.day3.dto.ProductDto;
 import com.example.day3.entity.Catalog;
+import com.example.day3.mapper.CatalogMapper;
 import com.example.day3.repository.CatalogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,22 +15,22 @@ public class CatalogService {
     @Autowired
     private CatalogRepository catalogRepository;
 
+    private final CatalogMapper catalogMapper = CatalogMapper.INSTANCE;
+
     public CatalogDto createCatalog(CatalogDto catalogDto) {
-        Catalog catalog = new Catalog();
-        catalog.setName(catalogDto.getName());
-        catalog.setDescription(catalogDto.getDescription());
+        Catalog catalog = catalogMapper.catalogDtoToCatalog(catalogDto);
         Catalog savedCatalog = catalogRepository.save(catalog);
-        return convertToDto(savedCatalog);
+        return catalogMapper.catalogToCatalogDto(savedCatalog);
     }
 
     public CatalogDto getCatalogById(Long id) {
         Catalog catalog = catalogRepository.findById(id).orElse(null);
-        return catalog != null ? convertToDto(catalog) : null;
+        return catalog != null ? catalogMapper.catalogToCatalogDto(catalog) : null;
     }
 
     public List<CatalogDto> getAllCatalogs() {
         return catalogRepository.findAll().stream()
-                .map(this::convertToDto)
+                .map(catalogMapper::catalogToCatalogDto)
                 .collect(Collectors.toList());
     }
 
@@ -40,7 +40,7 @@ public class CatalogService {
             catalog.setName(catalogDto.getName());
             catalog.setDescription(catalogDto.getDescription());
             Catalog updatedCatalog = catalogRepository.save(catalog);
-            return convertToDto(updatedCatalog);
+            return catalogMapper.catalogToCatalogDto(updatedCatalog);
         }
         return null;
     }
@@ -51,26 +51,5 @@ public class CatalogService {
 
     public void deleteAllCatalogs() {
         catalogRepository.deleteAll();
-    }
-
-    private CatalogDto convertToDto(Catalog catalog) {
-        CatalogDto catalogDto = new CatalogDto();
-        catalogDto.setId(catalog.getId());
-        catalogDto.setName(catalog.getName());
-        catalogDto.setDescription(catalog.getDescription());
-        catalogDto.setProducts(catalog.getProducts() != null ?
-                catalog.getProducts().stream()
-                        .map(product -> {
-                            ProductDto productDto = new ProductDto();
-                            productDto.setId(product.getId());
-                            productDto.setName(product.getName());
-                            productDto.setPrice(product.getPrice());
-                            productDto.setStock(product.getStock());
-                            productDto.setCatalogId(product.getCatalog().getId());
-                            return productDto;
-                        })
-                        .collect(Collectors.toList()) :
-                List.of());
-        return catalogDto;
     }
 }
