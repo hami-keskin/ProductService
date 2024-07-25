@@ -1,6 +1,6 @@
 package com.example.day3.controller;
 
-import com.example.day3.entity.Catalog;
+import com.example.day3.dto.CatalogDto;
 import com.example.day3.service.CatalogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,28 +15,28 @@ public class CatalogController {
     private CatalogService catalogService;
 
     @PostMapping
-    public ResponseEntity<Catalog> createCatalog(@RequestBody Catalog catalog) {
-        return ResponseEntity.ok(catalogService.createCatalog(catalog));
+    public ResponseEntity<CatalogDto> createCatalog(@RequestBody CatalogDto catalogDto) {
+        return ResponseEntity.ok(catalogService.createCatalog(catalogDto));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Catalog> getCatalogById(@PathVariable Long id) {
-        Catalog catalog = catalogService.getCatalogById(id);
-        if (catalog != null) {
-            return ResponseEntity.ok(catalog);
+    public ResponseEntity<CatalogDto> getCatalogById(@PathVariable Long id) {
+        CatalogDto catalogDto = catalogService.getCatalogById(id);
+        if (catalogDto != null) {
+            return ResponseEntity.ok(catalogDto);
         } else {
             return ResponseEntity.notFound().build();
         }
     }
 
     @GetMapping
-    public ResponseEntity<List<Catalog>> getAllCatalogs() {
+    public ResponseEntity<List<CatalogDto>> getAllCatalogs() {
         return ResponseEntity.ok(catalogService.getAllCatalogs());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Catalog> updateCatalog(@PathVariable Long id, @RequestBody Catalog catalogDetails) {
-        Catalog updatedCatalog = catalogService.updateCatalog(id, catalogDetails);
+    public ResponseEntity<CatalogDto> updateCatalog(@PathVariable Long id, @RequestBody CatalogDto catalogDto) {
+        CatalogDto updatedCatalog = catalogService.updateCatalog(id, catalogDto);
         if (updatedCatalog != null) {
             return ResponseEntity.ok(updatedCatalog);
         } else {

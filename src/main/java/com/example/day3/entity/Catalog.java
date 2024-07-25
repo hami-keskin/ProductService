@@ -1,11 +1,13 @@
 package com.example.day3.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -17,7 +19,7 @@ public class Catalog {
 
     @OneToMany(mappedBy = "catalog")
     @JsonManagedReference
-    private List<Product> products;
+    private List<Product> products = new ArrayList<>(); // Başlangıç olarak boş bir liste ile başlatılır
 
     // Getters and Setters
     public Long getId() {

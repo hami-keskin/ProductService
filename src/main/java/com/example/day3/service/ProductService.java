@@ -1,35 +1,48 @@
 package com.example.day3.service;
 
+import com.example.day3.dto.ProductDto;
+import com.example.day3.entity.Catalog;
 import com.example.day3.entity.Product;
 import com.example.day3.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    public Product createProduct(Product product) {
-        return productRepository.save(product);
+    public ProductDto createProduct(ProductDto productDto) {
+        Product product = new Product();
+        product.setName(productDto.getName());
+        product.setCatalog(new Catalog());
+        product.getCatalog().setId(productDto.getCatalogId());
+        Product savedProduct = productRepository.save(product);
+        return convertToDto(savedProduct);
     }
 
-    public Product getProductById(Long id) {
-        return productRepository.findById(id).orElse(null);
+    public ProductDto getProductById(Long id) {
+        Product product = productRepository.findById(id).orElse(null);
+        return product != null ? convertToDto(product) : null;
     }
 
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    public List<ProductDto> getAllProducts() {
+        return productRepository.findAll().stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
-    public Product updateProduct(Long id, Product productDetails) {
+    public ProductDto updateProduct(Long id, ProductDto productDto) {
         Product product = productRepository.findById(id).orElse(null);
         if (product != null) {
-            product.setName(productDetails.getName());
-            product.setCatalog(productDetails.getCatalog());
-            return productRepository.save(product);
+            product.setName(productDto.getName());
+            product.setCatalog(new Catalog());
+            product.getCatalog().setId(productDto.getCatalogId());
+            Product updatedProduct = productRepository.save(product);
+            return convertToDto(updatedProduct);
         } else {
             return null;
         }
@@ -41,5 +54,13 @@ public class ProductService {
 
     public void deleteAllProducts() {
         productRepository.deleteAll();
+    }
+
+    private ProductDto convertToDto(Product product) {
+        ProductDto productDto = new ProductDto();
+        productDto.setId(product.getId());
+        productDto.setName(product.getName());
+        productDto.setCatalogId(product.getCatalog().getId());
+        return productDto;
     }
 }

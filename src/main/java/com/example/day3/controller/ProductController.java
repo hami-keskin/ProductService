@@ -1,6 +1,6 @@
 package com.example.day3.controller;
 
-import com.example.day3.entity.Product;
+import com.example.day3.dto.ProductDto;
 import com.example.day3.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,28 +15,28 @@ public class ProductController {
     private ProductService productService;
 
     @PostMapping
-    public Product createProduct(@RequestBody Product product) {
-        return productService.createProduct(product);
+    public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto productDto) {
+        return ResponseEntity.ok(productService.createProduct(productDto));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable Long id) {
-        Product product = productService.getProductById(id);
-        if (product != null) {
-            return ResponseEntity.ok(product);
+    public ResponseEntity<ProductDto> getProductById(@PathVariable Long id) {
+        ProductDto productDto = productService.getProductById(id);
+        if (productDto != null) {
+            return ResponseEntity.ok(productDto);
         } else {
             return ResponseEntity.notFound().build();
         }
     }
 
     @GetMapping
-    public List<Product> getAllProducts() {
-        return productService.getAllProducts();
+    public ResponseEntity<List<ProductDto>> getAllProducts() {
+        return ResponseEntity.ok(productService.getAllProducts());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product productDetails) {
-        Product updatedProduct = productService.updateProduct(id, productDetails);
+    public ResponseEntity<ProductDto> updateProduct(@PathVariable Long id, @RequestBody ProductDto productDto) {
+        ProductDto updatedProduct = productService.updateProduct(id, productDto);
         if (updatedProduct != null) {
             return ResponseEntity.ok(updatedProduct);
         } else {
@@ -50,7 +50,6 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
 
-    // Tüm ürünleri silen endpoint
     @DeleteMapping
     public ResponseEntity<Void> deleteAllProducts() {
         productService.deleteAllProducts();
