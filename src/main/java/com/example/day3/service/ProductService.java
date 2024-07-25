@@ -4,7 +4,6 @@ import com.example.day3.dto.ProductDto;
 import com.example.day3.entity.Product;
 import com.example.day3.mapper.ProductMapper;
 import com.example.day3.repository.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -14,10 +13,13 @@ import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
-    @Autowired
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
+    private final ProductMapper productMapper;
 
-    private final ProductMapper productMapper = ProductMapper.INSTANCE;
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+        this.productMapper = ProductMapper.INSTANCE;
+    }
 
     @CacheEvict(value = "products", allEntries = true)
     public ProductDto createProduct(ProductDto productDto) {
