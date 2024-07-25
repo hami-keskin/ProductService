@@ -1,7 +1,7 @@
 {
     "info": {
         "name": "Catalog and Product API",
-        "_postman_id": "your-unique-id",
+        "_postman_id": "12345-abcde-67890-fghij",
         "description": "Postman collection for testing Catalog and Product API endpoints",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
     },
@@ -16,12 +16,13 @@
                         "header": [
                             {
                                 "key": "Content-Type",
-                                "value": "application/json"
+                                "value": "application/json",
+                                "type": "text"
                             }
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"name\": \"Sample Catalog\",\n    \"description\": \"This is a sample catalog\"\n}"
+                            "raw": "{\n    \"name\": \"Electronics\",\n    \"description\": \"All electronic items\"\n}"
                         },
                         "url": {
                             "raw": "http://localhost:8080/catalogs",
@@ -80,12 +81,13 @@
                         "header": [
                             {
                                 "key": "Content-Type",
-                                "value": "application/json"
+                                "value": "application/json",
+                                "type": "text"
                             }
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"name\": \"Updated Catalog\",\n    \"description\": \"This is an updated catalog description\"\n}"
+                            "raw": "{\n    \"name\": \"Updated Electronics\",\n    \"description\": \"Updated description\"\n}"
                         },
                         "url": {
                             "raw": "http://localhost:8080/catalogs/1",
@@ -102,7 +104,7 @@
                     }
                 },
                 {
-                    "name": "Delete Catalog",
+                    "name": "Delete Catalog by ID",
                     "request": {
                         "method": "DELETE",
                         "header": [],
@@ -150,12 +152,13 @@
                         "header": [
                             {
                                 "key": "Content-Type",
-                                "value": "application/json"
+                                "value": "application/json",
+                                "type": "text"
                             }
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"name\": \"Sample Product\",\n    \"price\": 100.0,\n    \"stock\": 50\n}"
+                            "raw": "{\n    \"name\": \"Laptop\",\n    \"price\": 1200.0,\n    \"stock\": 10,\n    \"catalogId\": 1\n}"
                         },
                         "url": {
                             "raw": "http://localhost:8080/products",
@@ -214,12 +217,13 @@
                         "header": [
                             {
                                 "key": "Content-Type",
-                                "value": "application/json"
+                                "value": "application/json",
+                                "type": "text"
                             }
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"name\": \"Updated Product\",\n    \"price\": 120.0,\n    \"stock\": 30\n}"
+                            "raw": "{\n    \"name\": \"Updated Laptop\",\n    \"price\": 1300.0,\n    \"stock\": 15,\n    \"catalogId\": 1\n}"
                         },
                         "url": {
                             "raw": "http://localhost:8080/products/1",
@@ -236,7 +240,7 @@
                     }
                 },
                 {
-                    "name": "Delete Product",
+                    "name": "Delete Product by ID",
                     "request": {
                         "method": "DELETE",
                         "header": [],
