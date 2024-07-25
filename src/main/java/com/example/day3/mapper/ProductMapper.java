@@ -14,19 +14,19 @@ public interface ProductMapper {
     @Mapping(source = "catalog.id", target = "catalogId")
     ProductDto productToProductDto(Product product);
 
-    @Mapping(source = "catalogId", target = "catalog")
+    @Mapping(source = "catalogId", target = "catalog.id")
     Product productDtoToProduct(ProductDto productDto);
 
-    default Catalog map(Long id) {
-        if (id == null) {
+    default Catalog mapCatalogIdToCatalog(Long catalogId) {
+        if (catalogId == null) {
             return null;
         }
         Catalog catalog = new Catalog();
-        catalog.setId(id);
+        catalog.setId(catalogId);
         return catalog;
     }
 
-    default Long map(Catalog catalog) {
+    default Long mapCatalogToCatalogId(Catalog catalog) {
         if (catalog == null) {
             return null;
         }

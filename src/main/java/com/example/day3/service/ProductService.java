@@ -4,7 +4,6 @@ import com.example.day3.dto.ProductDto;
 import com.example.day3.entity.Product;
 import com.example.day3.mapper.ProductMapper;
 import com.example.day3.repository.ProductRepository;
-import com.example.day3.repository.CatalogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -17,9 +16,6 @@ import java.util.stream.Collectors;
 public class ProductService {
     @Autowired
     private ProductRepository productRepository;
-
-    @Autowired
-    private CatalogRepository catalogRepository;
 
     private final ProductMapper productMapper = ProductMapper.INSTANCE;
 
@@ -50,7 +46,7 @@ public class ProductService {
             product.setName(productDto.getName());
             product.setPrice(productDto.getPrice());
             product.setStock(productDto.getStock());
-            product.setCatalog(catalogRepository.findById(productDto.getCatalogId()).orElse(null));
+            product.setCatalog(productMapper.mapCatalogIdToCatalog(productDto.getCatalogId()));
             Product updatedProduct = productRepository.save(product);
             return productMapper.productToProductDto(updatedProduct);
         }
