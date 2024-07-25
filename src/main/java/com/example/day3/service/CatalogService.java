@@ -5,6 +5,8 @@ import com.example.day3.entity.Catalog;
 import com.example.day3.mapper.CatalogMapper;
 import com.example.day3.repository.CatalogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,23 +19,27 @@ public class CatalogService {
 
     private final CatalogMapper catalogMapper = CatalogMapper.INSTANCE;
 
+    @CacheEvict(value = "catalogs", allEntries = true)
     public CatalogDto createCatalog(CatalogDto catalogDto) {
         Catalog catalog = catalogMapper.catalogDtoToCatalog(catalogDto);
         Catalog savedCatalog = catalogRepository.save(catalog);
         return catalogMapper.catalogToCatalogDto(savedCatalog);
     }
 
+    @Cacheable(value = "catalogs", key = "#id")
     public CatalogDto getCatalogById(Long id) {
         Catalog catalog = catalogRepository.findById(id).orElse(null);
         return catalog != null ? catalogMapper.catalogToCatalogDto(catalog) : null;
     }
 
+    @Cacheable(value = "catalogs")
     public List<CatalogDto> getAllCatalogs() {
         return catalogRepository.findAll().stream()
                 .map(catalogMapper::catalogToCatalogDto)
                 .collect(Collectors.toList());
     }
 
+    @CacheEvict(value = "catalogs", key = "#id")
     public CatalogDto updateCatalog(Long id, CatalogDto catalogDto) {
         Catalog catalog = catalogRepository.findById(id).orElse(null);
         if (catalog != null) {
@@ -45,10 +51,12 @@ public class CatalogService {
         return null;
     }
 
+    @CacheEvict(value = "catalogs", key = "#id")
     public void deleteCatalog(Long id) {
         catalogRepository.deleteById(id);
     }
 
+    @CacheEvict(value = "catalogs", allEntries = true)
     public void deleteAllCatalogs() {
         catalogRepository.deleteAll();
     }

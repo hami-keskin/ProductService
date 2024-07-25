@@ -4,11 +4,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 public class Catalog {
@@ -17,10 +12,6 @@ public class Catalog {
     private Long id;
     private String name;
     private String description;
-
-    @OneToMany(mappedBy = "catalog")
-    @JsonManagedReference
-    private List<Product> products = new ArrayList<>(); // Başlangıç olarak boş bir liste ile başlatılır
 
     // Getters and Setters
     public Long getId() {
@@ -45,14 +36,6 @@ public class Catalog {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
     }
 
     // No-argument constructor

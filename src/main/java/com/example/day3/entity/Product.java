@@ -4,8 +4,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 public class Product {
@@ -15,10 +13,6 @@ public class Product {
     private String name;
     private Double price;
     private Integer stock;
-
-    @ManyToOne
-    @JsonBackReference
-    private Catalog catalog;
 
     // Getters and Setters
     public Long getId() {
@@ -51,14 +45,6 @@ public class Product {
 
     public void setStock(Integer stock) {
         this.stock = stock;
-    }
-
-    public Catalog getCatalog() {
-        return catalog;
-    }
-
-    public void setCatalog(Catalog catalog) {
-        this.catalog = catalog;
     }
 
     // No-argument constructor

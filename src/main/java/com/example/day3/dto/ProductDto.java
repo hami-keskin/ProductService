@@ -5,7 +5,6 @@ public class ProductDto {
     private String name;
     private Double price;
     private Integer stock;
-    private Long catalogId;
 
     // Getters and Setters
     public Long getId() {
@@ -38,13 +37,5 @@ public class ProductDto {
 
     public void setStock(Integer stock) {
         this.stock = stock;
-    }
-
-    public Long getCatalogId() {
-        return catalogId;
-    }
-
-    public void setCatalogId(Long catalogId) {
-        this.catalogId = catalogId;
     }
 }
