@@ -1,10 +1,12 @@
 package com.example.day3.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Data
@@ -17,9 +19,4 @@ public class Product {
     private String name;
     private Double price;
     private Integer stock;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "catalog_id")
-    @JsonBackReference
-    private Catalog catalog;
 }

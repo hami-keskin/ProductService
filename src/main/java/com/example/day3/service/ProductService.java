@@ -46,7 +46,6 @@ public class ProductService {
             product.setName(productDto.getName());
             product.setPrice(productDto.getPrice());
             product.setStock(productDto.getStock());
-            product.setCatalog(productMapper.mapCatalogIdToCatalog(productDto.getCatalogId()));
             Product updatedProduct = productRepository.save(product);
             return productMapper.productToProductDto(updatedProduct);
         }
