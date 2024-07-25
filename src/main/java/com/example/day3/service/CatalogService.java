@@ -18,6 +18,7 @@ public class CatalogService {
     public CatalogDto createCatalog(CatalogDto catalogDto) {
         Catalog catalog = new Catalog();
         catalog.setName(catalogDto.getName());
+        catalog.setDescription(catalogDto.getDescription());
         Catalog savedCatalog = catalogRepository.save(catalog);
         return convertToDto(savedCatalog);
     }
@@ -37,6 +38,7 @@ public class CatalogService {
         Catalog catalog = catalogRepository.findById(id).orElse(null);
         if (catalog != null) {
             catalog.setName(catalogDto.getName());
+            catalog.setDescription(catalogDto.getDescription());
             Catalog updatedCatalog = catalogRepository.save(catalog);
             return convertToDto(updatedCatalog);
         }
@@ -55,12 +57,15 @@ public class CatalogService {
         CatalogDto catalogDto = new CatalogDto();
         catalogDto.setId(catalog.getId());
         catalogDto.setName(catalog.getName());
+        catalogDto.setDescription(catalog.getDescription());
         catalogDto.setProducts(catalog.getProducts() != null ?
                 catalog.getProducts().stream()
                         .map(product -> {
                             ProductDto productDto = new ProductDto();
                             productDto.setId(product.getId());
                             productDto.setName(product.getName());
+                            productDto.setPrice(product.getPrice());
+                            productDto.setStock(product.getStock());
                             productDto.setCatalogId(product.getCatalog().getId());
                             return productDto;
                         })

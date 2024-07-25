@@ -18,6 +18,8 @@ public class ProductService {
     public ProductDto createProduct(ProductDto productDto) {
         Product product = new Product();
         product.setName(productDto.getName());
+        product.setPrice(productDto.getPrice());
+        product.setStock(productDto.getStock());
         product.setCatalog(new Catalog());
         product.getCatalog().setId(productDto.getCatalogId());
         Product savedProduct = productRepository.save(product);
@@ -39,6 +41,8 @@ public class ProductService {
         Product product = productRepository.findById(id).orElse(null);
         if (product != null) {
             product.setName(productDto.getName());
+            product.setPrice(productDto.getPrice());
+            product.setStock(productDto.getStock());
             product.setCatalog(new Catalog());
             product.getCatalog().setId(productDto.getCatalogId());
             Product updatedProduct = productRepository.save(product);
@@ -59,6 +63,8 @@ public class ProductService {
         ProductDto productDto = new ProductDto();
         productDto.setId(product.getId());
         productDto.setName(product.getName());
+        productDto.setPrice(product.getPrice());
+        productDto.setStock(product.getStock());
         productDto.setCatalogId(product.getCatalog().getId());
         return productDto;
     }
