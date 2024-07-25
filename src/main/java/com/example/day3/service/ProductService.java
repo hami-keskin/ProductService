@@ -26,7 +26,6 @@ public class ProductService {
     @CacheEvict(value = "products", allEntries = true)
     public ProductDto createProduct(ProductDto productDto) {
         Product product = productMapper.productDtoToProduct(productDto);
-        product.setCatalog(catalogRepository.findById(productDto.getCatalogId()).orElse(null));
         Product savedProduct = productRepository.save(product);
         return productMapper.productToProductDto(savedProduct);
     }
