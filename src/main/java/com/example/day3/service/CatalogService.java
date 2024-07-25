@@ -39,9 +39,8 @@ public class CatalogService {
             catalog.setName(catalogDto.getName());
             Catalog updatedCatalog = catalogRepository.save(catalog);
             return convertToDto(updatedCatalog);
-        } else {
-            return null;
         }
+        return null;
     }
 
     public void deleteCatalog(Long id) {
@@ -56,7 +55,6 @@ public class CatalogService {
         CatalogDto catalogDto = new CatalogDto();
         catalogDto.setId(catalog.getId());
         catalogDto.setName(catalog.getName());
-        // Null kontrolü eklenir ve boş listeye dönüştürülür
         catalogDto.setProducts(catalog.getProducts() != null ?
                 catalog.getProducts().stream()
                         .map(product -> {

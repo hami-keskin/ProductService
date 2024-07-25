@@ -43,9 +43,8 @@ public class ProductService {
             product.getCatalog().setId(productDto.getCatalogId());
             Product updatedProduct = productRepository.save(product);
             return convertToDto(updatedProduct);
-        } else {
-            return null;
         }
+        return null;
     }
 
     public void deleteProduct(Long id) {
