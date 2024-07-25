@@ -24,8 +24,9 @@ public class CatalogController {
 
     @GetMapping("/{id}")
     public ResponseEntity<CatalogDto> getCatalogById(@PathVariable Long id) {
-        CatalogDto catalogDto = catalogService.getCatalogById(id);
-        return catalogDto != null ? ResponseEntity.ok(catalogDto) : ResponseEntity.notFound().build();
+        return catalogService.getCatalogById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping
@@ -35,8 +36,9 @@ public class CatalogController {
 
     @PutMapping("/{id}")
     public ResponseEntity<CatalogDto> updateCatalog(@PathVariable Long id, @RequestBody CatalogDto catalogDto) {
-        CatalogDto updatedCatalog = catalogService.updateCatalog(id, catalogDto);
-        return updatedCatalog != null ? ResponseEntity.ok(updatedCatalog) : ResponseEntity.notFound().build();
+        return catalogService.updateCatalog(id, catalogDto)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")

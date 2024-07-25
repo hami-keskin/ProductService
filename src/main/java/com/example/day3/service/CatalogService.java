@@ -9,6 +9,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,9 +30,9 @@ public class CatalogService {
     }
 
     @Cacheable(value = "catalogs", key = "#id")
-    public CatalogDto getCatalogById(Long id) {
-        Catalog catalog = catalogRepository.findById(id).orElse(null);
-        return catalog != null ? catalogMapper.catalogToCatalogDto(catalog) : null;
+    public Optional<CatalogDto> getCatalogById(Long id) {
+        return catalogRepository.findById(id)
+                .map(catalogMapper::catalogToCatalogDto);
     }
 
     @Cacheable(value = "catalogs")
@@ -42,15 +43,14 @@ public class CatalogService {
     }
 
     @CacheEvict(value = "catalogs", key = "#id")
-    public CatalogDto updateCatalog(Long id, CatalogDto catalogDto) {
-        Catalog catalog = catalogRepository.findById(id).orElse(null);
-        if (catalog != null) {
-            catalog.setName(catalogDto.getName());
-            catalog.setDescription(catalogDto.getDescription());
-            Catalog updatedCatalog = catalogRepository.save(catalog);
-            return catalogMapper.catalogToCatalogDto(updatedCatalog);
-        }
-        return null;
+    public Optional<CatalogDto> updateCatalog(Long id, CatalogDto catalogDto) {
+        return catalogRepository.findById(id)
+                .map(existingCatalog -> {
+                    existingCatalog.setName(catalogDto.getName());
+                    existingCatalog.setDescription(catalogDto.getDescription());
+                    Catalog updatedCatalog = catalogRepository.save(existingCatalog);
+                    return catalogMapper.catalogToCatalogDto(updatedCatalog);
+                });
     }
 
     @CacheEvict(value = "catalogs", key = "#id")

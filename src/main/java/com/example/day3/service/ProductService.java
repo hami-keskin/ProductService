@@ -9,6 +9,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,9 +30,9 @@ public class ProductService {
     }
 
     @Cacheable(value = "products", key = "#id")
-    public ProductDto getProductById(Long id) {
-        Product product = productRepository.findById(id).orElse(null);
-        return product != null ? productMapper.productToProductDto(product) : null;
+    public Optional<ProductDto> getProductById(Long id) {
+        return productRepository.findById(id)
+                .map(productMapper::productToProductDto);
     }
 
     @Cacheable(value = "products")
@@ -42,16 +43,15 @@ public class ProductService {
     }
 
     @CacheEvict(value = "products", key = "#id")
-    public ProductDto updateProduct(Long id, ProductDto productDto) {
-        Product product = productRepository.findById(id).orElse(null);
-        if (product != null) {
-            product.setName(productDto.getName());
-            product.setPrice(productDto.getPrice());
-            product.setStock(productDto.getStock());
-            Product updatedProduct = productRepository.save(product);
-            return productMapper.productToProductDto(updatedProduct);
-        }
-        return null;
+    public Optional<ProductDto> updateProduct(Long id, ProductDto productDto) {
+        return productRepository.findById(id)
+                .map(existingProduct -> {
+                    existingProduct.setName(productDto.getName());
+                    existingProduct.setPrice(productDto.getPrice());
+                    existingProduct.setStock(productDto.getStock());
+                    Product updatedProduct = productRepository.save(existingProduct);
+                    return productMapper.productToProductDto(updatedProduct);
+                });
     }
 
     @CacheEvict(value = "products", key = "#id")
