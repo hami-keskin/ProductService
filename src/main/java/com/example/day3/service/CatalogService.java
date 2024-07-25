@@ -4,7 +4,6 @@ import com.example.day3.dto.CatalogDto;
 import com.example.day3.entity.Catalog;
 import com.example.day3.mapper.CatalogMapper;
 import com.example.day3.repository.CatalogRepository;
-import com.example.day3.repository.ProductRepository;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -16,12 +15,10 @@ import java.util.stream.Collectors;
 @Service
 public class CatalogService {
     private final CatalogRepository catalogRepository;
-    private final ProductRepository productRepository;
     private final CatalogMapper catalogMapper;
 
-    public CatalogService(CatalogRepository catalogRepository, ProductRepository productRepository) {
+    public CatalogService(CatalogRepository catalogRepository) {
         this.catalogRepository = catalogRepository;
-        this.productRepository = productRepository;
         this.catalogMapper = CatalogMapper.INSTANCE;
     }
 
