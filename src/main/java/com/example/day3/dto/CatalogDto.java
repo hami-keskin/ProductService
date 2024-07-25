@@ -1,9 +1,12 @@
 package com.example.day3.dto;
 
+import java.util.List;
+
 public class CatalogDto {
     private Long id;
     private String name;
     private String description;
+    private List<ProductDto> products;
 
     // Getters and Setters
     public Long getId() {
@@ -28,5 +31,13 @@ public class CatalogDto {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<ProductDto> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<ProductDto> products) {
+        this.products = products;
     }
 }

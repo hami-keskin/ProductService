@@ -155,7 +155,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"name\": \"Sample Product\",\n    \"price\": 100.0,\n    \"stock\": 50\n}"
+                            "raw": "{\n    \"name\": \"Sample Product\",\n    \"price\": 100.0,\n    \"stock\": 50,\n    \"catalogId\": 1\n}"
                         },
                         "url": {
                             "raw": "http://localhost:8080/products",
@@ -219,7 +219,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"name\": \"Updated Product\",\n    \"price\": 120.0,\n    \"stock\": 30\n}"
+                            "raw": "{\n    \"name\": \"Updated Product\",\n    \"price\": 120.0,\n    \"stock\": 30,\n    \"catalogId\": 1\n}"
                         },
                         "url": {
                             "raw": "http://localhost:8080/products/1",
