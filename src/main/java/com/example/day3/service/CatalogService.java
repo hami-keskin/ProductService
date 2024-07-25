@@ -7,6 +7,8 @@ import com.example.day3.entity.Product;
 import com.example.day3.repository.CatalogRepository;
 import com.example.day3.repository.ProductRepository;
 import org.springframework.beans.BeanUtils;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +25,7 @@ public class CatalogService {
         this.productRepository = productRepository;
     }
 
+    @CacheEvict(value = "catalogs", allEntries = true)
     public CatalogDto createCatalog(CatalogDto catalogDto) {
         Catalog catalog = new Catalog();
         BeanUtils.copyProperties(catalogDto, catalog);
@@ -30,17 +33,20 @@ public class CatalogService {
         return mapToDto(savedCatalog);
     }
 
+    @Cacheable(value = "catalogs", key = "#id")
     public Optional<CatalogDto> getCatalogById(Long id) {
         return catalogRepository.findById(id)
                 .map(this::mapToDto);
     }
 
+    @Cacheable(value = "catalogs")
     public List<CatalogDto> getAllCatalogs() {
         return catalogRepository.findAll().stream()
                 .map(this::mapToDto)
                 .collect(Collectors.toList());
     }
 
+    @CacheEvict(value = "catalogs", key = "#id")
     public Optional<CatalogDto> updateCatalog(Long id, CatalogDto catalogDto) {
         return catalogRepository.findById(id)
                 .map(existingCatalog -> {
@@ -50,10 +56,12 @@ public class CatalogService {
                 });
     }
 
+    @CacheEvict(value = "catalogs", key = "#id")
     public void deleteCatalog(Long id) {
         catalogRepository.deleteById(id);
     }
 
+    @CacheEvict(value = "catalogs", allEntries = true)
     public void deleteAllCatalogs() {
         catalogRepository.deleteAll();
     }

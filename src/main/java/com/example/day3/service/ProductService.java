@@ -1,11 +1,12 @@
 package com.example.day3.service;
 
 import com.example.day3.dto.ProductDto;
-import com.example.day3.entity.Catalog;
 import com.example.day3.entity.Product;
 import com.example.day3.repository.CatalogRepository;
 import com.example.day3.repository.ProductRepository;
 import org.springframework.beans.BeanUtils;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class ProductService {
         this.catalogRepository = catalogRepository;
     }
 
+    @CacheEvict(value = "products", allEntries = true)
     public ProductDto createProduct(ProductDto productDto) {
         Product product = new Product();
         BeanUtils.copyProperties(productDto, product);
@@ -30,17 +32,20 @@ public class ProductService {
         return mapToDto(savedProduct);
     }
 
+    @Cacheable(value = "products", key = "#id")
     public Optional<ProductDto> getProductById(Long id) {
         return productRepository.findById(id)
                 .map(this::mapToDto);
     }
 
+    @Cacheable(value = "products")
     public List<ProductDto> getAllProducts() {
         return productRepository.findAll().stream()
                 .map(this::mapToDto)
                 .collect(Collectors.toList());
     }
 
+    @CacheEvict(value = "products", key = "#id")
     public Optional<ProductDto> updateProduct(Long id, ProductDto productDto) {
         return productRepository.findById(id)
                 .map(existingProduct -> {
@@ -51,10 +56,12 @@ public class ProductService {
                 });
     }
 
+    @CacheEvict(value = "products", key = "#id")
     public void deleteProduct(Long id) {
         productRepository.deleteById(id);
     }
 
+    @CacheEvict(value = "products", allEntries = true)
     public void deleteAllProducts() {
         productRepository.deleteAll();
     }
