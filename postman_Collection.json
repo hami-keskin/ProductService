@@ -17,7 +17,7 @@
                 ],
                 "body": {
                     "mode": "raw",
-                    "raw": "{\n  \"name\": \"Product1\",\n  \"catalogId\": 1\n}",
+                    "raw": "{\n  \"name\": \"Product1\",\n  \"price\": 100.0,\n  \"stock\": 50,\n  \"catalogId\": 1\n}",
                     "options": {
                         "raw": {
                             "language": "json"
@@ -86,7 +86,7 @@
                 ],
                 "body": {
                     "mode": "raw",
-                    "raw": "{\n  \"name\": \"Updated Product\",\n  \"catalogId\": 1\n}",
+                    "raw": "{\n  \"name\": \"Updated Product\",\n  \"price\": 120.0,\n  \"stock\": 40,\n  \"catalogId\": 1\n}",
                     "options": {
                         "raw": {
                             "language": "json"
@@ -156,7 +156,7 @@
                 ],
                 "body": {
                     "mode": "raw",
-                    "raw": "{\n  \"name\": \"Catalog1\"\n}",
+                    "raw": "{\n  \"name\": \"Catalog1\",\n  \"description\": \"Catalog Description\"\n}",
                     "options": {
                         "raw": {
                             "language": "json"
@@ -225,7 +225,7 @@
                 ],
                 "body": {
                     "mode": "raw",
-                    "raw": "{\n  \"name\": \"Updated Catalog\"\n}",
+                    "raw": "{\n  \"name\": \"Updated Catalog\",\n  \"description\": \"Updated Description\"\n}",
                     "options": {
                         "raw": {
                             "language": "json"
