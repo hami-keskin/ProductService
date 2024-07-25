@@ -9,8 +9,8 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,13 +28,9 @@ public class ProductService {
     @CacheEvict(value = "products", allEntries = true)
     public ProductDto createProduct(ProductDto productDto) {
         Product product = productMapper.productDtoToProduct(productDto);
-        if (productDto.getCatalogId() != null) {
-            catalogRepository.findById(productDto.getCatalogId()).ifPresent(product::setCatalog);
-        }
+        catalogRepository.findById(productDto.getCatalogId()).ifPresent(product::setCatalog);
         Product savedProduct = productRepository.save(product);
-        ProductDto savedProductDto = productMapper.productToProductDto(savedProduct);
-        savedProductDto.setCatalogId(savedProduct.getCatalog().getId());
-        return savedProductDto;
+        return productMapper.productToProductDto(savedProduct);
     }
 
     @Cacheable(value = "products", key = "#id")
@@ -42,9 +38,7 @@ public class ProductService {
         return productRepository.findById(id)
                 .map(product -> {
                     ProductDto productDto = productMapper.productToProductDto(product);
-                    if (product.getCatalog() != null) {
-                        productDto.setCatalogId(product.getCatalog().getId());
-                    }
+                    Optional.ofNullable(product.getCatalog()).ifPresent(catalog -> productDto.setCatalogId(catalog.getId()));
                     return productDto;
                 });
     }
@@ -54,9 +48,7 @@ public class ProductService {
         return productRepository.findAll().stream()
                 .map(product -> {
                     ProductDto productDto = productMapper.productToProductDto(product);
-                    if (product.getCatalog() != null) {
-                        productDto.setCatalogId(product.getCatalog().getId());
-                    }
+                    Optional.ofNullable(product.getCatalog()).ifPresent(catalog -> productDto.setCatalogId(catalog.getId()));
                     return productDto;
                 })
                 .collect(Collectors.toList());
@@ -69,13 +61,9 @@ public class ProductService {
                     existingProduct.setName(productDto.getName());
                     existingProduct.setPrice(productDto.getPrice());
                     existingProduct.setStock(productDto.getStock());
-                    if (productDto.getCatalogId() != null) {
-                        catalogRepository.findById(productDto.getCatalogId()).ifPresent(existingProduct::setCatalog);
-                    }
+                    catalogRepository.findById(productDto.getCatalogId()).ifPresent(existingProduct::setCatalog);
                     Product updatedProduct = productRepository.save(existingProduct);
-                    ProductDto updatedProductDto = productMapper.productToProductDto(updatedProduct);
-                    updatedProductDto.setCatalogId(existingProduct.getCatalog().getId());
-                    return updatedProductDto;
+                    return productMapper.productToProductDto(updatedProduct);
                 });
     }
 
