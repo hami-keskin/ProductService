@@ -2,7 +2,6 @@ package com.example.day3.controller;
 
 import com.example.day3.dto.CatalogDto;
 import com.example.day3.service.CatalogService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,8 +10,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/catalogs")
 public class CatalogController {
-    @Autowired
-    private CatalogService catalogService;
+
+    private final CatalogService catalogService;
+
+    public CatalogController(CatalogService catalogService) {
+        this.catalogService = catalogService;
+    }
 
     @PostMapping
     public ResponseEntity<CatalogDto> createCatalog(@RequestBody CatalogDto catalogDto) {
