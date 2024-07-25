@@ -1,8 +1,8 @@
 {
     "info": {
-        "name": "Catalog and Product API",
-        "_postman_id": "12345-abcde-67890-fghij",
-        "description": "Postman collection for testing Catalog and Product API endpoints",
+        "name": "CatalogProductAPI",
+        "_postman_id": "abcd1234-ef56-7890-gh12-ijklmnopqrst",
+        "description": "API endpoints for Catalog and Product CRUD operations",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
     },
     "item": [
@@ -13,16 +13,15 @@
                     "name": "Create Catalog",
                     "request": {
                         "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application/json",
-                                "type": "text"
-                            }
-                        ],
+                        "header": [],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"name\": \"Electronics\",\n    \"description\": \"All electronic items\"\n}"
+                            "raw": "{\n    \"name\": \"Sample Catalog\",\n    \"description\": \"This is a sample catalog.\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
                         },
                         "url": {
                             "raw": "http://localhost:8080/catalogs",
@@ -35,10 +34,11 @@
                                 "catalogs"
                             ]
                         }
-                    }
+                    },
+                    "response": []
                 },
                 {
-                    "name": "Get Catalog by ID",
+                    "name": "Get Catalog By ID",
                     "request": {
                         "method": "GET",
                         "header": [],
@@ -54,7 +54,8 @@
                                 "1"
                             ]
                         }
-                    }
+                    },
+                    "response": []
                 },
                 {
                     "name": "Get All Catalogs",
@@ -72,22 +73,22 @@
                                 "catalogs"
                             ]
                         }
-                    }
+                    },
+                    "response": []
                 },
                 {
                     "name": "Update Catalog",
                     "request": {
                         "method": "PUT",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application/json",
-                                "type": "text"
-                            }
-                        ],
+                        "header": [],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"name\": \"Updated Electronics\",\n    \"description\": \"Updated description\"\n}"
+                            "raw": "{\n    \"name\": \"Updated Catalog\",\n    \"description\": \"This is an updated sample catalog.\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
                         },
                         "url": {
                             "raw": "http://localhost:8080/catalogs/1",
@@ -101,10 +102,11 @@
                                 "1"
                             ]
                         }
-                    }
+                    },
+                    "response": []
                 },
                 {
-                    "name": "Delete Catalog by ID",
+                    "name": "Delete Catalog",
                     "request": {
                         "method": "DELETE",
                         "header": [],
@@ -120,7 +122,8 @@
                                 "1"
                             ]
                         }
-                    }
+                    },
+                    "response": []
                 },
                 {
                     "name": "Delete All Catalogs",
@@ -138,7 +141,8 @@
                                 "catalogs"
                             ]
                         }
-                    }
+                    },
+                    "response": []
                 }
             ]
         },
@@ -149,16 +153,15 @@
                     "name": "Create Product",
                     "request": {
                         "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application/json",
-                                "type": "text"
-                            }
-                        ],
+                        "header": [],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"name\": \"Laptop\",\n    \"price\": 1200.0,\n    \"stock\": 10,\n    \"catalogId\": 1\n}"
+                            "raw": "{\n    \"name\": \"Sample Product\",\n    \"price\": 100.0,\n    \"stock\": 50,\n    \"catalogId\": 1\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
                         },
                         "url": {
                             "raw": "http://localhost:8080/products",
@@ -171,10 +174,11 @@
                                 "products"
                             ]
                         }
-                    }
+                    },
+                    "response": []
                 },
                 {
-                    "name": "Get Product by ID",
+                    "name": "Get Product By ID",
                     "request": {
                         "method": "GET",
                         "header": [],
@@ -190,7 +194,8 @@
                                 "1"
                             ]
                         }
-                    }
+                    },
+                    "response": []
                 },
                 {
                     "name": "Get All Products",
@@ -208,22 +213,22 @@
                                 "products"
                             ]
                         }
-                    }
+                    },
+                    "response": []
                 },
                 {
                     "name": "Update Product",
                     "request": {
                         "method": "PUT",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application/json",
-                                "type": "text"
-                            }
-                        ],
+                        "header": [],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"name\": \"Updated Laptop\",\n    \"price\": 1300.0,\n    \"stock\": 15,\n    \"catalogId\": 1\n}"
+                            "raw": "{\n    \"name\": \"Updated Product\",\n    \"price\": 150.0,\n    \"stock\": 30,\n    \"catalogId\": 1\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
                         },
                         "url": {
                             "raw": "http://localhost:8080/products/1",
@@ -237,10 +242,11 @@
                                 "1"
                             ]
                         }
-                    }
+                    },
+                    "response": []
                 },
                 {
-                    "name": "Delete Product by ID",
+                    "name": "Delete Product",
                     "request": {
                         "method": "DELETE",
                         "header": [],
@@ -256,7 +262,8 @@
                                 "1"
                             ]
                         }
-                    }
+                    },
+                    "response": []
                 },
                 {
                     "name": "Delete All Products",
@@ -274,7 +281,8 @@
                                 "products"
                             ]
                         }
-                    }
+                    },
+                    "response": []
                 }
             ]
         }
