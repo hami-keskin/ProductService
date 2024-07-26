@@ -25,6 +25,11 @@ public class ProductController {
         return productService.getProductById(id);
     }
 
+    @GetMapping("/catalog/{catalogId}")
+    public List<ProductDto> getProductsByCatalogId(@PathVariable Integer catalogId) {
+        return productService.getProductsByCatalogId(catalogId);
+    }
+
     @PostMapping
     public ProductDto createProduct(@RequestBody ProductDto productDto) {
         return productService.createProduct(productDto);

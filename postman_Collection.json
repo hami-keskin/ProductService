@@ -1,8 +1,6 @@
 {
     "info": {
-        "name": "Catalog and Product API",
-        "_postman_id": "12345",
-        "description": "Collection for testing Catalog and Product API endpoints",
+        "name": "Day3 API",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
     },
     "item": [
@@ -14,9 +12,13 @@
                 "url": {
                     "raw": "http://localhost:8080/catalogs",
                     "protocol": "http",
-                    "host": ["localhost"],
+                    "host": [
+                        "localhost"
+                    ],
                     "port": "8080",
-                    "path": ["catalogs"]
+                    "path": [
+                        "catalogs"
+                    ]
                 }
             }
         },
@@ -28,9 +30,14 @@
                 "url": {
                     "raw": "http://localhost:8080/catalogs/1",
                     "protocol": "http",
-                    "host": ["localhost"],
+                    "host": [
+                        "localhost"
+                    ],
                     "port": "8080",
-                    "path": ["catalogs", "1"]
+                    "path": [
+                        "catalogs",
+                        "1"
+                    ]
                 }
             }
         },
@@ -46,14 +53,18 @@
                 ],
                 "body": {
                     "mode": "raw",
-                    "raw": "{\n    \"name\": \"New Catalog\"\n}"
+                    "raw": "{\"name\": \"New Catalog\"}"
                 },
                 "url": {
                     "raw": "http://localhost:8080/catalogs",
                     "protocol": "http",
-                    "host": ["localhost"],
+                    "host": [
+                        "localhost"
+                    ],
                     "port": "8080",
-                    "path": ["catalogs"]
+                    "path": [
+                        "catalogs"
+                    ]
                 }
             }
         },
@@ -69,14 +80,19 @@
                 ],
                 "body": {
                     "mode": "raw",
-                    "raw": "{\n    \"name\": \"Updated Catalog\"\n}"
+                    "raw": "{\"name\": \"Updated Catalog\"}"
                 },
                 "url": {
                     "raw": "http://localhost:8080/catalogs/1",
                     "protocol": "http",
-                    "host": ["localhost"],
+                    "host": [
+                        "localhost"
+                    ],
                     "port": "8080",
-                    "path": ["catalogs", "1"]
+                    "path": [
+                        "catalogs",
+                        "1"
+                    ]
                 }
             }
         },
@@ -88,9 +104,14 @@
                 "url": {
                     "raw": "http://localhost:8080/catalogs/1",
                     "protocol": "http",
-                    "host": ["localhost"],
+                    "host": [
+                        "localhost"
+                    ],
                     "port": "8080",
-                    "path": ["catalogs", "1"]
+                    "path": [
+                        "catalogs",
+                        "1"
+                    ]
                 }
             }
         },
@@ -102,9 +123,13 @@
                 "url": {
                     "raw": "http://localhost:8080/products",
                     "protocol": "http",
-                    "host": ["localhost"],
+                    "host": [
+                        "localhost"
+                    ],
                     "port": "8080",
-                    "path": ["products"]
+                    "path": [
+                        "products"
+                    ]
                 }
             }
         },
@@ -116,9 +141,34 @@
                 "url": {
                     "raw": "http://localhost:8080/products/1",
                     "protocol": "http",
-                    "host": ["localhost"],
+                    "host": [
+                        "localhost"
+                    ],
                     "port": "8080",
-                    "path": ["products", "1"]
+                    "path": [
+                        "products",
+                        "1"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Get Products By Catalog ID",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "http://localhost:8080/products/catalog/1",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8080",
+                    "path": [
+                        "products",
+                        "catalog",
+                        "1"
+                    ]
                 }
             }
         },
@@ -134,14 +184,18 @@
                 ],
                 "body": {
                     "mode": "raw",
-                    "raw": "{\n    \"name\": \"New Product\",\n    \"price\": 10.0,\n    \"catalogId\": 1\n}"
+                    "raw": "{\"name\": \"New Product\", \"price\": 10.0, \"catalogId\": 1}"
                 },
                 "url": {
                     "raw": "http://localhost:8080/products",
                     "protocol": "http",
-                    "host": ["localhost"],
+                    "host": [
+                        "localhost"
+                    ],
                     "port": "8080",
-                    "path": ["products"]
+                    "path": [
+                        "products"
+                    ]
                 }
             }
         },
@@ -157,14 +211,19 @@
                 ],
                 "body": {
                     "mode": "raw",
-                    "raw": "{\n    \"name\": \"Updated Product\",\n    \"price\": 20.0,\n    \"catalogId\": 1\n}"
+                    "raw": "{\"name\": \"Updated Product\", \"price\": 15.0, \"catalogId\": 1}"
                 },
                 "url": {
                     "raw": "http://localhost:8080/products/1",
                     "protocol": "http",
-                    "host": ["localhost"],
+                    "host": [
+                        "localhost"
+                    ],
                     "port": "8080",
-                    "path": ["products", "1"]
+                    "path": [
+                        "products",
+                        "1"
+                    ]
                 }
             }
         },
@@ -176,9 +235,14 @@
                 "url": {
                     "raw": "http://localhost:8080/products/1",
                     "protocol": "http",
-                    "host": ["localhost"],
+                    "host": [
+                        "localhost"
+                    ],
                     "port": "8080",
-                    "path": ["products", "1"]
+                    "path": [
+                        "products",
+                        "1"
+                    ]
                 }
             }
         }

@@ -33,6 +33,13 @@ public class ProductService {
                 .orElse(null);
     }
 
+    @Cacheable(value = "productsByCatalog", key = "#catalogId")
+    public List<ProductDto> getProductsByCatalogId(Integer catalogId) {
+        return productRepository.findByCatalogId(catalogId).stream()
+                .map(ProductMapper.INSTANCE::toDto)
+                .collect(Collectors.toList());
+    }
+
     @CacheEvict(value = "products", allEntries = true)
     public ProductDto createProduct(ProductDto productDto) {
         Product product = ProductMapper.INSTANCE.toEntity(productDto);
