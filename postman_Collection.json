@@ -1,196 +1,268 @@
 {
     "info": {
-        "name": "CatalogProductAPI",
-        "_postman_id": "d8f7e2f6-3e2b-4d58-85a7-873bb0b6e4be",
-        "description": "API endpoints for Catalog and Product",
+        "name": "Catalog and Product API",
+        "_postman_id": "c1234567-89ab-cdef-0123-456789abcdef",
+        "description": "Postman Collection for Catalog and Product API",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
     },
     "item": [
         {
-            "name": "Catalogs",
-            "item": [
-                {
-                    "name": "Get All Catalogs",
-                    "request": {
-                        "method": "GET",
-                        "header": [],
-                        "url": {
-                            "raw": "http://localhost:8080/catalogs",
-                            "protocol": "http",
-                            "host": ["localhost"],
-                            "port": "8080",
-                            "path": ["catalogs"]
-                        }
-                    }
-                },
-                {
-                    "name": "Get Catalog By ID",
-                    "request": {
-                        "method": "GET",
-                        "header": [],
-                        "url": {
-                            "raw": "http://localhost:8080/catalogs/:id",
-                            "protocol": "http",
-                            "host": ["localhost"],
-                            "port": "8080",
-                            "path": ["catalogs", ":id"]
-                        }
-                    }
-                },
-                {
-                    "name": "Create Catalog",
-                    "request": {
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\n    \"name\": \"Electronics\",\n    \"description\": \"All electronic items\"\n}"
-                        },
-                        "url": {
-                            "raw": "http://localhost:8080/catalogs",
-                            "protocol": "http",
-                            "host": ["localhost"],
-                            "port": "8080",
-                            "path": ["catalogs"]
-                        }
-                    }
-                },
-                {
-                    "name": "Update Catalog",
-                    "request": {
-                        "method": "PUT",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\n    \"name\": \"Updated Electronics\",\n    \"description\": \"All updated electronic items\"\n}"
-                        },
-                        "url": {
-                            "raw": "http://localhost:8080/catalogs/:id",
-                            "protocol": "http",
-                            "host": ["localhost"],
-                            "port": "8080",
-                            "path": ["catalogs", ":id"]
-                        }
-                    }
-                },
-                {
-                    "name": "Delete Catalog",
-                    "request": {
-                        "method": "DELETE",
-                        "header": [],
-                        "url": {
-                            "raw": "http://localhost:8080/catalogs/:id",
-                            "protocol": "http",
-                            "host": ["localhost"],
-                            "port": "8080",
-                            "path": ["catalogs", ":id"]
-                        }
-                    }
+            "name": "Get All Catalogs",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "http//localhost:8080/catalogs",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8080",
+                    "path": [
+                        "catalogs"
+                    ]
                 }
-            ]
+            }
         },
         {
-            "name": "Products",
-            "item": [
-                {
-                    "name": "Get All Products",
-                    "request": {
-                        "method": "GET",
-                        "header": [],
-                        "url": {
-                            "raw": "http://localhost:8080/products",
-                            "protocol": "http",
-                            "host": ["localhost"],
-                            "port": "8080",
-                            "path": ["products"]
-                        }
-                    }
-                },
-                {
-                    "name": "Get Product By ID",
-                    "request": {
-                        "method": "GET",
-                        "header": [],
-                        "url": {
-                            "raw": "http://localhost:8080/products/:id",
-                            "protocol": "http",
-                            "host": ["localhost"],
-                            "port": "8080",
-                            "path": ["products", ":id"]
-                        }
-                    }
-                },
-                {
-                    "name": "Create Product",
-                    "request": {
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\n    \"name\": \"Laptop\",\n    \"description\": \"A high-end gaming laptop\",\n    \"price\": 1200.00,\n    \"stock\": 10,\n    \"catalogId\": 1\n}"
-                        },
-                        "url": {
-                            "raw": "http://localhost:8080/products",
-                            "protocol": "http",
-                            "host": ["localhost"],
-                            "port": "8080",
-                            "path": ["products"]
-                        }
-                    }
-                },
-                {
-                    "name": "Update Product",
-                    "request": {
-                        "method": "PUT",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\n    \"name\": \"Updated Laptop\",\n    \"description\": \"An updated high-end gaming laptop\",\n    \"price\": 1300.00,\n    \"stock\": 8,\n    \"catalogId\": 1\n}"
-                        },
-                        "url": {
-                            "raw": "http://localhost:8080/products/:id",
-                            "protocol": "http",
-                            "host": ["localhost"],
-                            "port": "8080",
-                            "path": ["products", ":id"]
-                        }
-                    }
-                },
-                {
-                    "name": "Delete Product",
-                    "request": {
-                        "method": "DELETE",
-                        "header": [],
-                        "url": {
-                            "raw": "http://localhost:8080/products/:id",
-                            "protocol": "http",
-                            "host": ["localhost"],
-                            "port": "8080",
-                            "path": ["products", ":id"]
-                        }
-                    }
+            "name": "Get Catalog by ID",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "http//localhost:8080/catalogs/1",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8080",
+                    "path": [
+                        "catalogs",
+                        "1"
+                    ]
                 }
-            ]
+            }
+        },
+        {
+            "name": "Create Catalog",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\"name\":\"Catalog1\",\"description\":\"Description1\",\"products\":[]}"
+                },
+                "url": {
+                    "raw": "http//localhost:8080/catalogs",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8080",
+                    "path": [
+                        "catalogs"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Update Catalog",
+            "request": {
+                "method": "PUT",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\"name\":\"Updated Catalog\",\"description\":\"Updated Description\",\"products\":[]}"
+                },
+                "url": {
+                    "raw": "http//localhost:8080/catalogs/1",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8080",
+                    "path": [
+                        "catalogs",
+                        "1"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Delete Catalog",
+            "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                    "raw": "http//localhost:8080/catalogs/1",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8080",
+                    "path": [
+                        "catalogs",
+                        "1"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Delete All Catalogs",
+            "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                    "raw": "http//localhost:8080/catalogs",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8080",
+                    "path": [
+                        "catalogs"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Get All Products",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "http//localhost:8080/products",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8080",
+                    "path": [
+                        "products"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Get Product by ID",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "http//localhost:8080/products/1",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8080",
+                    "path": [
+                        "products",
+                        "1"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Create Product",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\"name\":\"Product1\",\"description\":\"Description1\",\"price\":100.0,\"manufacturer\":\"Manufacturer1\",\"catalogId\":1}"
+                },
+                "url": {
+                    "raw": "http//localhost:8080/products",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8080",
+                    "path": [
+                        "products"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Update Product",
+            "request": {
+                "method": "PUT",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\"name\":\"Updated Product\",\"description\":\"Updated Description\",\"price\":150.0,\"manufacturer\":\"Updated Manufacturer\",\"catalogId\":1}"
+                },
+                "url": {
+                    "raw": "http//localhost:8080/products/1",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8080",
+                    "path": [
+                        "products",
+                        "1"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Delete Product",
+            "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                    "raw": "http//localhost:8080/products/1",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8080",
+                    "path": [
+                        "products",
+                        "1"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Delete All Products",
+            "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                    "raw": "http//localhost:8080/products",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8080",
+                    "path": [
+                        "products"
+                    ]
+                }
+            }
         }
     ]
 }

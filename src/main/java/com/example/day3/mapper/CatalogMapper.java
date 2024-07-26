@@ -9,6 +9,6 @@ import org.mapstruct.factory.Mappers;
 public interface CatalogMapper {
     CatalogMapper INSTANCE = Mappers.getMapper(CatalogMapper.class);
 
-    CatalogDto catalogToCatalogDto(Catalog catalog);
-    Catalog catalogDtoToCatalog(CatalogDto catalogDto);
+    CatalogDto toCatalogDto(Catalog catalog);
+    Catalog toCatalog(CatalogDto catalogDto);
 }

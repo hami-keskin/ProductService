@@ -1,65 +1,72 @@
 package com.example.day3.service;
 
 import com.example.day3.dto.ProductDto;
+import com.example.day3.entity.Catalog;
 import com.example.day3.entity.Product;
 import com.example.day3.mapper.ProductMapper;
+import com.example.day3.repository.CatalogRepository;
 import com.example.day3.repository.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Caching;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ProductService {
+    private final ProductRepository productRepository;
+    private final CatalogRepository catalogRepository;
+    private final ProductMapper productMapper = ProductMapper.INSTANCE;
 
-    @Autowired
-    private ProductRepository productRepository;
-
-    @Cacheable(value = "products")
     public List<ProductDto> getAllProducts() {
         return productRepository.findAll().stream()
-                .map(ProductMapper.INSTANCE::productToProductDto)
+                .map(productMapper::toProductDto)
                 .collect(Collectors.toList());
     }
 
-    @Cacheable(value = "products", key = "#id")
-    public ProductDto getProductById(Long id) {
-        return productRepository.findById(id)
-                .map(ProductMapper.INSTANCE::productToProductDto)
-                .orElse(null);
+    public ProductDto getProductById(Integer id) {
+        Optional<Product> product = productRepository.findById(id);
+        return product.map(productMapper::toProductDto).orElse(null);
     }
 
-    @Caching(evict = {
-            @CacheEvict(value = "products", allEntries = true),
-            @CacheEvict(value = "products", key = "#result.id")
-    })
     public ProductDto createProduct(ProductDto productDto) {
-        Product product = ProductMapper.INSTANCE.productDtoToProduct(productDto);
-        return ProductMapper.INSTANCE.productToProductDto(productRepository.save(product));
+        Optional<Catalog> catalog = catalogRepository.findById(productDto.getCatalogId());
+        if (catalog.isPresent()) {
+            Product product = productMapper.toProduct(productDto);
+            product.setCatalog(catalog.get());
+            product = productRepository.save(product);
+            return productMapper.toProductDto(product);
+        } else {
+            throw new IllegalArgumentException("Invalid catalog ID");
+        }
     }
 
-    @Caching(evict = {
-            @CacheEvict(value = "products", allEntries = true),
-            @CacheEvict(value = "products", key = "#id")
-    })
-    public ProductDto updateProduct(Long id, ProductDto productDto) {
-        Product product = productRepository.findById(id).orElseThrow();
-        product.setName(productDto.getName());
-        product.setDescription(productDto.getDescription());
-        product.setPrice(productDto.getPrice());
-        product.setStock(productDto.getStock());
-        return ProductMapper.INSTANCE.productToProductDto(productRepository.save(product));
+    public ProductDto updateProduct(Integer id, ProductDto productDto) {
+        if (productRepository.existsById(id)) {
+            Optional<Catalog> catalog = catalogRepository.findById(productDto.getCatalogId());
+            if (catalog.isPresent()) {
+                Product product = productMapper.toProduct(productDto);
+                product.setId(id);
+                product.setCatalog(catalog.get());
+                product = productRepository.save(product);
+                return productMapper.toProductDto(product);
+            } else {
+                throw new IllegalArgumentException("Invalid catalog ID");
+            }
+        } else {
+            return null;
+        }
     }
 
-    @Caching(evict = {
-            @CacheEvict(value = "products", allEntries = true),
-            @CacheEvict(value = "products", key = "#id")
-    })
-    public void deleteProduct(Long id) {
+    public void deleteProduct(Integer id) {
         productRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void deleteAllProducts() {
+        productRepository.deleteAll();
     }
 }
