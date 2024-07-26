@@ -23,6 +23,7 @@ public class ProductService {
     private final ProductMapper productMapper = ProductMapper.INSTANCE;
 
     @CacheEvict(value = "products", allEntries = true)
+    @Transactional
     public ProductDto createProduct(ProductDto productDto) {
         Product product = productMapper.productDtoToProduct(productDto);
         catalogRepository.findById(productDto.getCatalogId()).ifPresent(product::setCatalog);

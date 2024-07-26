@@ -1,4 +1,3 @@
-// CatalogService.java
 package com.example.day3.service;
 
 import com.example.day3.dto.CatalogDto;
@@ -25,8 +24,18 @@ public class CatalogService {
     private final ProductMapper productMapper = ProductMapper.INSTANCE;
 
     @CacheEvict(value = "catalogs", allEntries = true)
+    @Transactional
     public CatalogDto createCatalog(CatalogDto catalogDto) {
         Catalog catalog = catalogMapper.catalogDtoToCatalog(catalogDto);
+        if (catalogDto.getProducts() != null) {
+            List<Product> products = catalogDto.getProducts().stream()
+                    .map(productDto -> {
+                        Product product = productMapper.productDtoToProduct(productDto);
+                        product.setCatalog(catalog);
+                        return product;
+                    }).collect(Collectors.toList());
+            catalog.setProducts(products);
+        }
         Catalog savedCatalog = catalogRepository.save(catalog);
         return catalogMapper.catalogToCatalogDto(savedCatalog);
     }
@@ -52,7 +61,6 @@ public class CatalogService {
                     existingCatalog.setName(catalogDto.getName());
                     existingCatalog.setDescription(catalogDto.getDescription());
 
-                    // Eski ürünleri mevcut katalogdan al ve yeni ürünleri set et
                     existingCatalog.getProducts().clear();
                     if (catalogDto.getProducts() != null) {
                         existingCatalog.getProducts().addAll(
