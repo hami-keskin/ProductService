@@ -3,8 +3,8 @@ package com.example.day3.service;
 import com.example.day3.dto.CatalogDto;
 import com.example.day3.entity.Catalog;
 import com.example.day3.entity.Product;
-import com.example.day3.mapper.CatalogMapper;
 import com.example.day3.mapper.ProductMapper;
+import com.example.day3.mapper.CatalogMapper;
 import com.example.day3.repository.CatalogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
@@ -37,19 +37,19 @@ public class CatalogService {
             catalog.setProducts(products);
         }
         Catalog savedCatalog = catalogRepository.save(catalog);
-        return catalogMapper.catalogToCatalogDto(savedCatalog);
+        return catalogMapper.convertToCatalogDtoWithProducts(savedCatalog);
     }
 
     @Cacheable(value = "catalogs", key = "#id")
     public Optional<CatalogDto> getCatalogById(Long id) {
         return catalogRepository.findById(id)
-                .map(catalogMapper::catalogToCatalogDto);
+                .map(catalogMapper::convertToCatalogDtoWithProducts);
     }
 
     @Cacheable(value = "catalogs")
     public List<CatalogDto> getAllCatalogs() {
         return catalogRepository.findAll().stream()
-                .map(catalogMapper::catalogToCatalogDto)
+                .map(catalogMapper::convertToCatalogDtoWithProducts)
                 .collect(Collectors.toList());
     }
 
@@ -75,7 +75,7 @@ public class CatalogService {
                     }
 
                     Catalog updatedCatalog = catalogRepository.save(existingCatalog);
-                    return catalogMapper.catalogToCatalogDto(updatedCatalog);
+                    return catalogMapper.convertToCatalogDtoWithProducts(updatedCatalog);
                 });
     }
 
