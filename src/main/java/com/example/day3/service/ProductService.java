@@ -1,4 +1,3 @@
-// ProductService.java
 package com.example.day3.service;
 
 import com.example.day3.dto.ProductDto;
@@ -10,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -43,14 +43,24 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     @CacheEvict(value = "products", key = "#id")
     public Optional<ProductDto> updateProduct(Long id, ProductDto productDto) {
         return productRepository.findById(id)
                 .map(existingProduct -> {
-                    Product product = productMapper.productDtoToProduct(productDto);
-                    product.setId(existingProduct.getId());
-                    catalogRepository.findById(productDto.getCatalogId()).ifPresent(product::setCatalog);
-                    Product updatedProduct = productRepository.save(product);
+                    existingProduct.setName(productDto.getName());
+                    existingProduct.setPrice(productDto.getPrice());
+                    existingProduct.setStock(productDto.getStock());
+                    catalogRepository.findById(productDto.getCatalogId()).ifPresent(existingProduct::setCatalog);
+
+                    // Log ekleyerek işlemin gerçekleşip gerçekleşmediğini kontrol edelim
+                    System.out.println("Updating product: " + existingProduct);
+
+                    Product updatedProduct = productRepository.save(existingProduct);
+
+                    // Log ekleyerek güncelleme işleminin sonuçlarını kontrol edelim
+                    System.out.println("Updated product: " + updatedProduct);
+
                     return productMapper.productToProductDto(updatedProduct);
                 });
     }
