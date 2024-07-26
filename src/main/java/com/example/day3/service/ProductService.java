@@ -57,7 +57,7 @@ public class ProductService {
         return ProductMapper.INSTANCE.toDto(productRepository.save(product));
     }
 
-    @CacheEvict(value = "products", key = "#id")
+    @CacheEvict(value = {"products", "productsByCatalog"}, key = "#id", allEntries = true)
     public void deleteProduct(Integer id) {
         productRepository.deleteById(id);
     }

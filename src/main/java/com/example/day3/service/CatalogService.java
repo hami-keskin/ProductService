@@ -49,7 +49,7 @@ public class CatalogService {
         return CatalogMapper.INSTANCE.toDto(catalogRepository.save(catalog));
     }
 
-    @CacheEvict(value = "catalogs", key = "#id")
+    @CacheEvict(value = {"catalogs", "productsByCatalog"}, key = "#id", allEntries = true)
     public void deleteCatalog(Integer id) {
         catalogRepository.deleteById(id);
     }
