@@ -1,3 +1,4 @@
+// CatalogMapper.java
 package com.example.day3.mapper;
 
 import com.example.day3.dto.CatalogDto;
@@ -9,6 +10,6 @@ import org.mapstruct.factory.Mappers;
 public interface CatalogMapper {
     CatalogMapper INSTANCE = Mappers.getMapper(CatalogMapper.class);
 
-    CatalogDto toCatalogDto(Catalog catalog);
-    Catalog toCatalog(CatalogDto catalogDto);
+    CatalogDto toDto(Catalog catalog);
+    Catalog toEntity(CatalogDto catalogDto);
 }

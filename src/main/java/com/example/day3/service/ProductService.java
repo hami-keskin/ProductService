@@ -1,71 +1,58 @@
+// ProductService.java
 package com.example.day3.service;
 
 import com.example.day3.dto.ProductDto;
-import com.example.day3.entity.Catalog;
 import com.example.day3.entity.Product;
 import com.example.day3.mapper.ProductMapper;
-import com.example.day3.repository.CatalogRepository;
 import com.example.day3.repository.ProductRepository;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class ProductService {
-    private final ProductRepository productRepository;
-    private final CatalogRepository catalogRepository;
-    private final ProductMapper productMapper = ProductMapper.INSTANCE;
 
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Cacheable("products")
     public List<ProductDto> getAllProducts() {
         return productRepository.findAll().stream()
-                .map(productMapper::toProductDto)
+                .map(ProductMapper.INSTANCE::toDto)
                 .collect(Collectors.toList());
     }
 
+    @Cacheable(value = "products", key = "#id")
     public ProductDto getProductById(Integer id) {
-        Optional<Product> product = productRepository.findById(id);
-        return product.map(productMapper::toProductDto).orElse(null);
+        return productRepository.findById(id)
+                .map(ProductMapper.INSTANCE::toDto)
+                .orElse(null);
     }
 
+    @CacheEvict(value = "products", allEntries = true)
     public ProductDto createProduct(ProductDto productDto) {
-        Optional<Catalog> catalog = catalogRepository.findById(productDto.getCatalogId());
-        if (catalog.isPresent()) {
-            Product product = productMapper.toProduct(productDto);
-            product.setCatalog(catalog.get());
-            product = productRepository.save(product);
-            return productMapper.toProductDto(product);
-        } else {
-            throw new IllegalArgumentException("Invalid catalog ID");
-        }
+        Product product = ProductMapper.INSTANCE.toEntity(productDto);
+        return ProductMapper.INSTANCE.toDto(productRepository.save(product));
     }
 
+    @CacheEvict(value = "products", allEntries = true)
     public ProductDto updateProduct(Integer id, ProductDto productDto) {
-        if (productRepository.existsById(id)) {
-            Optional<Catalog> catalog = catalogRepository.findById(productDto.getCatalogId());
-            if (catalog.isPresent()) {
-                Product product = productMapper.toProduct(productDto);
-                product.setId(id);
-                product.setCatalog(catalog.get());
-                product = productRepository.save(product);
-                return productMapper.toProductDto(product);
-            } else {
-                throw new IllegalArgumentException("Invalid catalog ID");
-            }
-        } else {
-            return null;
-        }
+        Product product = productRepository.findById(id).orElseThrow();
+        product.setName(productDto.getName());
+        product.setPrice(productDto.getPrice());
+        return ProductMapper.INSTANCE.toDto(productRepository.save(product));
     }
 
+    @CacheEvict(value = "products", key = "#id")
     public void deleteProduct(Integer id) {
         productRepository.deleteById(id);
     }
 
-    @Transactional
+    @CacheEvict(value = "products", allEntries = true)
     public void deleteAllProducts() {
         productRepository.deleteAll();
     }

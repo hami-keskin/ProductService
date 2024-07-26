@@ -1,18 +1,19 @@
+// CatalogController.java
 package com.example.day3.controller;
 
 import com.example.day3.dto.CatalogDto;
 import com.example.day3.service.CatalogService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/catalogs")
-@RequiredArgsConstructor
 public class CatalogController {
-    private final CatalogService catalogService;
+
+    @Autowired
+    private CatalogService catalogService;
 
     @GetMapping
     public List<CatalogDto> getAllCatalogs() {
@@ -20,9 +21,8 @@ public class CatalogController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CatalogDto> getCatalogById(@PathVariable Integer id) {
-        CatalogDto catalogDto = catalogService.getCatalogById(id);
-        return catalogDto != null ? ResponseEntity.ok(catalogDto) : ResponseEntity.notFound().build();
+    public CatalogDto getCatalogById(@PathVariable Integer id) {
+        return catalogService.getCatalogById(id);
     }
 
     @PostMapping
@@ -31,20 +31,17 @@ public class CatalogController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CatalogDto> updateCatalog(@PathVariable Integer id, @RequestBody CatalogDto catalogDto) {
-        CatalogDto updatedCatalog = catalogService.updateCatalog(id, catalogDto);
-        return updatedCatalog != null ? ResponseEntity.ok(updatedCatalog) : ResponseEntity.notFound().build();
+    public CatalogDto updateCatalog(@PathVariable Integer id, @RequestBody CatalogDto catalogDto) {
+        return catalogService.updateCatalog(id, catalogDto);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCatalog(@PathVariable Integer id) {
+    public void deleteCatalog(@PathVariable Integer id) {
         catalogService.deleteCatalog(id);
-        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> deleteAllCatalogs() {
+    public void deleteAllCatalogs() {
         catalogService.deleteAllCatalogs();
-        return ResponseEntity.noContent().build();
     }
 }

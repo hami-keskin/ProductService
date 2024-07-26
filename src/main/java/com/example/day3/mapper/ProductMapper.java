@@ -1,3 +1,4 @@
+// ProductMapper.java
 package com.example.day3.mapper;
 
 import com.example.day3.dto.ProductDto;
@@ -9,6 +10,6 @@ import org.mapstruct.factory.Mappers;
 public interface ProductMapper {
     ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
 
-    ProductDto toProductDto(Product product);
-    Product toProduct(ProductDto productDto);
+    ProductDto toDto(Product product);
+    Product toEntity(ProductDto productDto);
 }

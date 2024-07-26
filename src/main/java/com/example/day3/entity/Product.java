@@ -1,31 +1,21 @@
+// Product.java
 package com.example.day3.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
 
-@Entity
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Entity
 public class Product {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NonNull
     private String name;
-
-    @NonNull
-    private String description;
-
-    @NonNull
     private Double price;
 
-    @NonNull
-    private String manufacturer;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "catalog_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "catalog_id")
     private Catalog catalog;
 }

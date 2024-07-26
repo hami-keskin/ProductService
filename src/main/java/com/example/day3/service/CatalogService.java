@@ -1,56 +1,57 @@
+// CatalogService.java
 package com.example.day3.service;
 
 import com.example.day3.dto.CatalogDto;
 import com.example.day3.entity.Catalog;
 import com.example.day3.mapper.CatalogMapper;
 import com.example.day3.repository.CatalogRepository;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class CatalogService {
-    private final CatalogRepository catalogRepository;
-    private final CatalogMapper catalogMapper = CatalogMapper.INSTANCE;
 
+    @Autowired
+    private CatalogRepository catalogRepository;
+
+    @Cacheable("catalogs")
     public List<CatalogDto> getAllCatalogs() {
         return catalogRepository.findAll().stream()
-                .map(catalogMapper::toCatalogDto)
+                .map(CatalogMapper.INSTANCE::toDto)
                 .collect(Collectors.toList());
     }
 
+    @Cacheable(value = "catalogs", key = "#id")
     public CatalogDto getCatalogById(Integer id) {
-        Optional<Catalog> catalog = catalogRepository.findById(id);
-        return catalog.map(catalogMapper::toCatalogDto).orElse(null);
+        return catalogRepository.findById(id)
+                .map(CatalogMapper.INSTANCE::toDto)
+                .orElse(null);
     }
 
+    @CacheEvict(value = "catalogs", allEntries = true)
     public CatalogDto createCatalog(CatalogDto catalogDto) {
-        Catalog catalog = catalogMapper.toCatalog(catalogDto);
-        catalog = catalogRepository.save(catalog);
-        return catalogMapper.toCatalogDto(catalog);
+        Catalog catalog = CatalogMapper.INSTANCE.toEntity(catalogDto);
+        return CatalogMapper.INSTANCE.toDto(catalogRepository.save(catalog));
     }
 
+    @CacheEvict(value = "catalogs", allEntries = true)
     public CatalogDto updateCatalog(Integer id, CatalogDto catalogDto) {
-        if (catalogRepository.existsById(id)) {
-            Catalog catalog = catalogMapper.toCatalog(catalogDto);
-            catalog.setId(id);
-            catalog = catalogRepository.save(catalog);
-            return catalogMapper.toCatalogDto(catalog);
-        } else {
-            return null;
-        }
+        Catalog catalog = catalogRepository.findById(id).orElseThrow();
+        catalog.setName(catalogDto.getName());
+        return CatalogMapper.INSTANCE.toDto(catalogRepository.save(catalog));
     }
 
+    @CacheEvict(value = "catalogs", key = "#id")
     public void deleteCatalog(Integer id) {
         catalogRepository.deleteById(id);
     }
 
-    @Transactional
+    @CacheEvict(value = "catalogs", allEntries = true)
     public void deleteAllCatalogs() {
         catalogRepository.deleteAll();
     }
