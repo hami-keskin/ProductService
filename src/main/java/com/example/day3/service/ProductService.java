@@ -7,6 +7,7 @@ import com.example.day3.mapper.ProductMapper;
 import com.example.day3.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -46,7 +47,7 @@ public class ProductService {
         return ProductMapper.INSTANCE.toDto(productRepository.save(product));
     }
 
-    @CacheEvict(value = "products", allEntries = true)
+    @CachePut(value = "products", key = "#id")
     public ProductDto updateProduct(Integer id, ProductDto productDto) {
         Product product = productRepository.findById(id).orElseThrow();
         product.setName(productDto.getName());
