@@ -43,6 +43,7 @@ public class CatalogService {
     public CatalogDto updateCatalog(Integer id, CatalogDto catalogDto) {
         Catalog catalog = catalogRepository.findById(id).orElseThrow();
         catalog.setName(catalogDto.getName());
+        catalog.setDescription(catalogDto.getDescription());
         return CatalogMapper.INSTANCE.toDto(catalogRepository.save(catalog));
     }
 

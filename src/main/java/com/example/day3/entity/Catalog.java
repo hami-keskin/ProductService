@@ -17,6 +17,7 @@ public class Catalog {
     private Integer id;
 
     private String name;
+    private String description;
 
     @OneToMany(mappedBy = "catalog", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Product> products;

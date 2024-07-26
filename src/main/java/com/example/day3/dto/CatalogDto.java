@@ -7,4 +7,5 @@ import lombok.Data;
 public class CatalogDto {
     private Integer id;
     private String name;
+    private String description;
 }

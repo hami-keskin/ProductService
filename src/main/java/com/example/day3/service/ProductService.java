@@ -51,6 +51,8 @@ public class ProductService {
         Product product = productRepository.findById(id).orElseThrow();
         product.setName(productDto.getName());
         product.setPrice(productDto.getPrice());
+        product.setDescription(productDto.getDescription());
+        product.setStock(productDto.getStock());
         return ProductMapper.INSTANCE.toDto(productRepository.save(product));
     }
 
