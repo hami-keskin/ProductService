@@ -1,3 +1,4 @@
+// CatalogDto.java
 package com.example.day3.dto;
 
 import lombok.AllArgsConstructor;

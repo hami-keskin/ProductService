@@ -1,7 +1,9 @@
+// CatalogController.java
 package com.example.day3.controller;
 
 import com.example.day3.dto.CatalogDto;
 import com.example.day3.service.CatalogService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,13 +11,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/catalogs")
+@RequiredArgsConstructor
 public class CatalogController {
 
     private final CatalogService catalogService;
-
-    public CatalogController(CatalogService catalogService) {
-        this.catalogService = catalogService;
-    }
 
     @PostMapping
     public ResponseEntity<CatalogDto> createCatalog(@RequestBody CatalogDto catalogDto) {

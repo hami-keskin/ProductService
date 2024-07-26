@@ -1,3 +1,4 @@
+// ProductService.java
 package com.example.day3.service;
 
 import com.example.day3.dto.ProductDto;
@@ -5,6 +6,7 @@ import com.example.day3.entity.Product;
 import com.example.day3.mapper.ProductMapper;
 import com.example.day3.repository.CatalogRepository;
 import com.example.day3.repository.ProductRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -14,16 +16,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
     private final CatalogRepository catalogRepository;
-    private final ProductMapper productMapper;
-
-    public ProductService(ProductRepository productRepository, CatalogRepository catalogRepository) {
-        this.productRepository = productRepository;
-        this.catalogRepository = catalogRepository;
-        this.productMapper = ProductMapper.INSTANCE;
-    }
+    private final ProductMapper productMapper = ProductMapper.INSTANCE;
 
     @CacheEvict(value = "products", allEntries = true)
     public ProductDto createProduct(ProductDto productDto) {

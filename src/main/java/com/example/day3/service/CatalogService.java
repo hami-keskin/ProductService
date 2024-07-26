@@ -1,9 +1,11 @@
+// CatalogService.java
 package com.example.day3.service;
 
 import com.example.day3.dto.CatalogDto;
 import com.example.day3.entity.Catalog;
 import com.example.day3.mapper.CatalogMapper;
 import com.example.day3.repository.CatalogRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -13,14 +15,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class CatalogService {
     private final CatalogRepository catalogRepository;
-    private final CatalogMapper catalogMapper;
-
-    public CatalogService(CatalogRepository catalogRepository) {
-        this.catalogRepository = catalogRepository;
-        this.catalogMapper = CatalogMapper.INSTANCE;
-    }
+    private final CatalogMapper catalogMapper = CatalogMapper.INSTANCE;
 
     @CacheEvict(value = "catalogs", allEntries = true)
     public CatalogDto createCatalog(CatalogDto catalogDto) {

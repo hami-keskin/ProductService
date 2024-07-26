@@ -1,3 +1,4 @@
+// Product.java
 package com.example.day3.entity;
 
 import jakarta.persistence.*;
