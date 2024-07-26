@@ -44,6 +44,7 @@ public class CatalogService {
         Catalog catalog = catalogRepository.findById(id).orElseThrow();
         catalog.setName(catalogDto.getName());
         catalog.setDescription(catalogDto.getDescription());
+        catalog.setStatus(catalogDto.getStatus());
         return CatalogMapper.INSTANCE.toDto(catalogRepository.save(catalog));
     }
 

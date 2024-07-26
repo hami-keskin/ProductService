@@ -53,6 +53,7 @@ public class ProductService {
         product.setPrice(productDto.getPrice());
         product.setDescription(productDto.getDescription());
         product.setStock(productDto.getStock());
+        product.setStatus(productDto.getStatus());
         return ProductMapper.INSTANCE.toDto(productRepository.save(product));
     }
 
