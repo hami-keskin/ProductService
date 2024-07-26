@@ -49,7 +49,7 @@ public class CatalogService {
     @Cacheable(value = "catalogs")
     public List<CatalogDto> getAllCatalogs() {
         return catalogRepository.findAll().stream()
-                .map(catalogMapper::convertToCatalogDtoWithProducts)
+                .map(catalog -> catalogMapper.convertToCatalogDtoWithProducts(catalog))
                 .collect(Collectors.toList());
     }
 

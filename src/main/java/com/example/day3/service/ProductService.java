@@ -1,6 +1,7 @@
 package com.example.day3.service;
 
 import com.example.day3.dto.ProductDto;
+import com.example.day3.entity.Catalog;
 import com.example.day3.entity.Product;
 import com.example.day3.mapper.ProductMapper;
 import com.example.day3.repository.CatalogRepository;
@@ -67,9 +68,18 @@ public class ProductService {
     }
 
     @CacheEvict(value = "products", key = "#id")
+    @Transactional
     public void deleteProduct(Long id) {
-        productRepository.deleteById(id);
+        productRepository.findById(id).ifPresent(product -> {
+            Catalog catalog = product.getCatalog();
+            if (catalog != null) {
+                catalog.getProducts().remove(product);
+                catalogRepository.save(catalog);
+            }
+            productRepository.delete(product);
+        });
     }
+
 
     @CacheEvict(value = "products", allEntries = true)
     public void deleteAllProducts() {
