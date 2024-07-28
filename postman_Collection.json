@@ -1,6 +1,6 @@
 {
     "info": {
-        "name": "Day3 API",
+        "name": "Catalog and Product API",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
     },
     "item": [
@@ -10,15 +10,11 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                    "raw": "http localhost 8080 catalogs",
+                    "raw": "http://localhost:8080/catalogs",
                     "protocol": "http",
-                    "host": [
-                        "localhost"
-                    ],
+                    "host": ["localhost"],
                     "port": "8080",
-                    "path": [
-                        "catalogs"
-                    ]
+                    "path": ["catalogs"]
                 }
             }
         },
@@ -28,16 +24,11 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                    "raw": "http localhost 8080 catalogs 1",
+                    "raw": "http://localhost:8080/catalogs/1",
                     "protocol": "http",
-                    "host": [
-                        "localhost"
-                    ],
+                    "host": ["localhost"],
                     "port": "8080",
-                    "path": [
-                        "catalogs",
-                        "1"
-                    ]
+                    "path": ["catalogs", "1"]
                 }
             }
         },
@@ -53,18 +44,14 @@
                 ],
                 "body": {
                     "mode": "raw",
-                    "raw": "{\"name\": \"New Catalog\", \"description\": \"Catalog Description\", \"status\": true}"
+                    "raw": "{\n  \"name\": \"Catalog Name\",\n  \"description\": \"Catalog Description\",\n  \"status\": true\n}"
                 },
                 "url": {
-                    "raw": "http localhost 8080 catalogs",
+                    "raw": "http://localhost:8080/catalogs",
                     "protocol": "http",
-                    "host": [
-                        "localhost"
-                    ],
+                    "host": ["localhost"],
                     "port": "8080",
-                    "path": [
-                        "catalogs"
-                    ]
+                    "path": ["catalogs"]
                 }
             }
         },
@@ -80,19 +67,14 @@
                 ],
                 "body": {
                     "mode": "raw",
-                    "raw": "{\"name\": \"Updated Catalog\", \"description\": \"Updated Description\", \"status\": false}"
+                    "raw": "{\n  \"name\": \"Updated Catalog Name\",\n  \"description\": \"Updated Catalog Description\",\n  \"status\": false\n}"
                 },
                 "url": {
-                    "raw": "http localhost 8080 catalogs 1",
+                    "raw": "http://localhost:8080/catalogs/1",
                     "protocol": "http",
-                    "host": [
-                        "localhost"
-                    ],
+                    "host": ["localhost"],
                     "port": "8080",
-                    "path": [
-                        "catalogs",
-                        "1"
-                    ]
+                    "path": ["catalogs", "1"]
                 }
             }
         },
@@ -102,16 +84,11 @@
                 "method": "DELETE",
                 "header": [],
                 "url": {
-                    "raw": "http localhost 8080 catalogs 1",
+                    "raw": "http://localhost:8080/catalogs/1",
                     "protocol": "http",
-                    "host": [
-                        "localhost"
-                    ],
+                    "host": ["localhost"],
                     "port": "8080",
-                    "path": [
-                        "catalogs",
-                        "1"
-                    ]
+                    "path": ["catalogs", "1"]
                 }
             }
         },
@@ -121,15 +98,11 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                    "raw": "http localhost 8080 products",
+                    "raw": "http://localhost:8080/products",
                     "protocol": "http",
-                    "host": [
-                        "localhost"
-                    ],
+                    "host": ["localhost"],
                     "port": "8080",
-                    "path": [
-                        "products"
-                    ]
+                    "path": ["products"]
                 }
             }
         },
@@ -139,36 +112,11 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                    "raw": "http localhost 8080 products 1",
+                    "raw": "http://localhost:8080/products/1",
                     "protocol": "http",
-                    "host": [
-                        "localhost"
-                    ],
+                    "host": ["localhost"],
                     "port": "8080",
-                    "path": [
-                        "products",
-                        "1"
-                    ]
-                }
-            }
-        },
-        {
-            "name": "Get Products By Catalog ID",
-            "request": {
-                "method": "GET",
-                "header": [],
-                "url": {
-                    "raw": "http localhost 8080 products catalog 1",
-                    "protocol": "http",
-                    "host": [
-                        "localhost"
-                    ],
-                    "port": "8080",
-                    "path": [
-                        "products",
-                        "catalog",
-                        "1"
-                    ]
+                    "path": ["products", "1"]
                 }
             }
         },
@@ -184,18 +132,14 @@
                 ],
                 "body": {
                     "mode": "raw",
-                    "raw": "{\"name\": \"New Product\", \"price\": 10.0, \"description\": \"Product Description\", \"stock\": 100, \"status\": true, \"catalogId\": 1}"
+                    "raw": "{\n  \"name\": \"Product Name\",\n  \"price\": 10.0,\n  \"description\": \"Product Description\",\n  \"status\": true,\n  \"catalogId\": 1\n}"
                 },
                 "url": {
-                    "raw": "http localhost 8080 products",
+                    "raw": "http://localhost:8080/products",
                     "protocol": "http",
-                    "host": [
-                        "localhost"
-                    ],
+                    "host": ["localhost"],
                     "port": "8080",
-                    "path": [
-                        "products"
-                    ]
+                    "path": ["products"]
                 }
             }
         },
@@ -211,19 +155,14 @@
                 ],
                 "body": {
                     "mode": "raw",
-                    "raw": "{\"name\": \"Updated Product\", \"price\": 15.0, \"description\": \"Updated Description\", \"stock\": 200, \"status\": false, \"catalogId\": 1}"
+                    "raw": "{\n  \"name\": \"Updated Product Name\",\n  \"price\": 15.0,\n  \"description\": \"Updated Product Description\",\n  \"status\": false,\n  \"catalogId\": 1\n}"
                 },
                 "url": {
-                    "raw": "http localhost 8080 products 1",
+                    "raw": "http://localhost:8080/products/1",
                     "protocol": "http",
-                    "host": [
-                        "localhost"
-                    ],
+                    "host": ["localhost"],
                     "port": "8080",
-                    "path": [
-                        "products",
-                        "1"
-                    ]
+                    "path": ["products", "1"]
                 }
             }
         },
@@ -233,16 +172,25 @@
                 "method": "DELETE",
                 "header": [],
                 "url": {
-                    "raw": "http localhost 8080 products 1",
+                    "raw": "http://localhost:8080/products/1",
                     "protocol": "http",
-                    "host": [
-                        "localhost"
-                    ],
+                    "host": ["localhost"],
                     "port": "8080",
-                    "path": [
-                        "products",
-                        "1"
-                    ]
+                    "path": ["products", "1"]
+                }
+            }
+        },
+        {
+            "name": "Get Products By Catalog ID",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "http://localhost:8080/products/catalog/1",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "8080",
+                    "path": ["products", "catalog", "1"]
                 }
             }
         }

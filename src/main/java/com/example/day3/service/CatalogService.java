@@ -1,4 +1,3 @@
-// CatalogService.java
 package com.example.day3.service;
 
 import com.example.day3.dto.CatalogDto;
@@ -10,6 +9,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,12 +34,14 @@ public class CatalogService {
                 .orElse(null);
     }
 
+    @Transactional
     @CacheEvict(value = "catalogs", allEntries = true)
     public CatalogDto createCatalog(CatalogDto catalogDto) {
         Catalog catalog = CatalogMapper.INSTANCE.toEntity(catalogDto);
         return CatalogMapper.INSTANCE.toDto(catalogRepository.save(catalog));
     }
 
+    @Transactional
     @CachePut(value = "catalogs", key = "#id")
     public CatalogDto updateCatalog(Integer id, CatalogDto catalogDto) {
         Catalog catalog = catalogRepository.findById(id).orElseThrow();
@@ -49,11 +51,13 @@ public class CatalogService {
         return CatalogMapper.INSTANCE.toDto(catalogRepository.save(catalog));
     }
 
+    @Transactional
     @CacheEvict(value = {"catalogs", "productsByCatalog"}, key = "#id", allEntries = true)
     public void deleteCatalog(Integer id) {
         catalogRepository.deleteById(id);
     }
 
+    @Transactional
     @CacheEvict(value = "catalogs", allEntries = true)
     public void deleteAllCatalogs() {
         catalogRepository.deleteAll();

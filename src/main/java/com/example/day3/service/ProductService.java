@@ -1,4 +1,3 @@
-// ProductService.java
 package com.example.day3.service;
 
 import com.example.day3.dto.ProductDto;
@@ -10,6 +9,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,12 +41,14 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     @CacheEvict(value = "products", allEntries = true)
     public ProductDto createProduct(ProductDto productDto) {
         Product product = ProductMapper.INSTANCE.toEntity(productDto);
         return ProductMapper.INSTANCE.toDto(productRepository.save(product));
     }
 
+    @Transactional
     @CachePut(value = "products", key = "#id")
     public ProductDto updateProduct(Integer id, ProductDto productDto) {
         Product product = productRepository.findById(id).orElseThrow();
@@ -57,11 +59,13 @@ public class ProductService {
         return ProductMapper.INSTANCE.toDto(productRepository.save(product));
     }
 
+    @Transactional
     @CacheEvict(value = {"products", "productsByCatalog"}, key = "#id", allEntries = true)
     public void deleteProduct(Integer id) {
         productRepository.deleteById(id);
     }
 
+    @Transactional
     @CacheEvict(value = "products", allEntries = true)
     public void deleteAllProducts() {
         productRepository.deleteAll();
