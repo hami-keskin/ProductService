@@ -44,7 +44,7 @@
                 ],
                 "body": {
                     "mode": "raw",
-                    "raw": "{\n  \"name\": \"Catalog Name\",\n  \"description\": \"Catalog Description\",\n  \"status\": true\n}"
+                    "raw": "{\"name\": \"Catalog Name\", \"description\": \"Catalog Description\", \"status\": true}"
                 },
                 "url": {
                     "raw": "http://localhost:8080/catalogs",
@@ -67,7 +67,7 @@
                 ],
                 "body": {
                     "mode": "raw",
-                    "raw": "{\n  \"name\": \"Updated Catalog Name\",\n  \"description\": \"Updated Catalog Description\",\n  \"status\": false\n}"
+                    "raw": "{\"name\": \"Updated Catalog Name\", \"description\": \"Updated Catalog Description\", \"status\": false}"
                 },
                 "url": {
                     "raw": "http://localhost:8080/catalogs/1",
@@ -132,7 +132,7 @@
                 ],
                 "body": {
                     "mode": "raw",
-                    "raw": "{\n  \"name\": \"Product Name\",\n  \"price\": 10.0,\n  \"description\": \"Product Description\",\n  \"status\": true,\n  \"catalogId\": 1\n}"
+                    "raw": "{\"name\": \"Product Name\", \"price\": 10.0, \"description\": \"Product Description\", \"status\": true, \"catalogId\": 1}"
                 },
                 "url": {
                     "raw": "http://localhost:8080/products",
@@ -155,7 +155,7 @@
                 ],
                 "body": {
                     "mode": "raw",
-                    "raw": "{\n  \"name\": \"Updated Product Name\",\n  \"price\": 15.0,\n  \"description\": \"Updated Product Description\",\n  \"status\": false,\n  \"catalogId\": 1\n}"
+                    "raw": "{\"name\": \"Updated Product Name\", \"price\": 15.0, \"description\": \"Updated Product Description\", \"status\": false, \"catalogId\": 1}"
                 },
                 "url": {
                     "raw": "http://localhost:8080/products/1",
@@ -191,6 +191,117 @@
                     "host": ["localhost"],
                     "port": "8080",
                     "path": ["products", "catalog", "1"]
+                }
+            }
+        },
+        {
+            "name": "Get All Stocks",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "http://localhost:8080/stocks",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "8080",
+                    "path": ["stocks"]
+                }
+            }
+        },
+        {
+            "name": "Get Stock By ID",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "http://localhost:8080/stocks/1",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "8080",
+                    "path": ["stocks", "1"]
+                }
+            }
+        },
+        {
+            "name": "Create Stock",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\"productId\": 1, \"quantity\": 100}"
+                },
+                "url": {
+                    "raw": "http://localhost:8080/stocks",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "8080",
+                    "path": ["stocks"]
+                }
+            }
+        },
+        {
+            "name": "Update Stock",
+            "request": {
+                "method": "PUT",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\"quantity\": 50}"
+                },
+                "url": {
+                    "raw": "http://localhost:8080/stocks/1",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "8080",
+                    "path": ["stocks", "1"]
+                }
+            }
+        },
+        {
+            "name": "Delete Stock",
+            "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                    "raw": "http://localhost:8080/stocks/1",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "8080",
+                    "path": ["stocks", "1"]
+                }
+            }
+        },
+        {
+            "name": "Reduce Stock",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\"productId\": 1, \"quantity\": 10}"
+                },
+                "url": {
+                    "raw": "http://localhost:8080/stocks/reduce",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "8080",
+                    "path": ["stocks", "reduce"]
                 }
             }
         }

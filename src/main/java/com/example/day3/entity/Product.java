@@ -22,4 +22,7 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "catalog_id")
     private Catalog catalog;
+
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Stock stock;
 }
