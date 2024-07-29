@@ -21,10 +21,7 @@ public class StockService {
 
     @Autowired
     private StockRepository stockRepository;
-
-    @Autowired
-    private ProductRepository productRepository;
-
+    
     @Cacheable("stocks")
     public List<StockDto> getAllStocks() {
         return stockRepository.findAll().stream()
