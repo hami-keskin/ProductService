@@ -1,11 +1,9 @@
 package com.example.day3.service;
 
 import com.example.day3.dto.StockDto;
-import com.example.day3.entity.Product;
 import com.example.day3.entity.Stock;
 import com.example.day3.mapper.StockMapper;
 import com.example.day3.repository.StockRepository;
-import com.example.day3.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
