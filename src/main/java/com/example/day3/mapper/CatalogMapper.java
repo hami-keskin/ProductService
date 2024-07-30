@@ -1,4 +1,3 @@
-// CatalogMapper.java
 package com.example.day3.mapper;
 
 import com.example.day3.dto.CatalogDto;

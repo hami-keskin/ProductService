@@ -1,4 +1,3 @@
-// Product.java
 package com.example.day3.entity;
 
 import jakarta.persistence.*;
@@ -9,11 +8,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 public class Product {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     private String name;
     private Double price;
     private String description;

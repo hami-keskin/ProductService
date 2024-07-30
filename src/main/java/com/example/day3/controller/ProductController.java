@@ -1,4 +1,3 @@
-// ProductController.java
 package com.example.day3.controller;
 
 import com.example.day3.dto.ProductDto;
