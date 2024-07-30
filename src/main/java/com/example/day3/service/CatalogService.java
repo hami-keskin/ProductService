@@ -4,7 +4,6 @@ import com.example.day3.dto.CatalogDto;
 import com.example.day3.entity.Catalog;
 import com.example.day3.mapper.CatalogMapper;
 import com.example.day3.repository.CatalogRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -17,8 +16,12 @@ import java.util.stream.Collectors;
 @Service
 public class CatalogService {
 
-    @Autowired
-    private CatalogRepository catalogRepository;
+    private final CatalogRepository catalogRepository;
+
+    // Constructor injection
+    public CatalogService(CatalogRepository catalogRepository) {
+        this.catalogRepository = catalogRepository;
+    }
 
     @Cacheable("catalogs")
     public List<CatalogDto> getAllCatalogs() {

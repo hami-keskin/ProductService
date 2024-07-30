@@ -2,7 +2,6 @@ package com.example.day3.controller;
 
 import com.example.day3.dto.StockDto;
 import com.example.day3.service.StockService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,8 +10,11 @@ import java.util.List;
 @RequestMapping("/stocks")
 public class StockController {
 
-    @Autowired
-    private StockService stockService;
+    private final StockService stockService;
+
+    public StockController(StockService stockService) {
+        this.stockService = stockService;
+    }
 
     @GetMapping
     public List<StockDto> getAllStocks() {

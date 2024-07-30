@@ -4,7 +4,6 @@ import com.example.day3.dto.ProductDto;
 import com.example.day3.entity.Product;
 import com.example.day3.mapper.ProductMapper;
 import com.example.day3.repository.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -17,8 +16,12 @@ import java.util.stream.Collectors;
 @Service
 public class ProductService {
 
-    @Autowired
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
+
+    // Constructor injection
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
 
     @Cacheable("products")
     public List<ProductDto> getAllProducts() {
