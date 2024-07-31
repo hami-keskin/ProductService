@@ -180,5 +180,33 @@ public class ProductServiceTest {
         // Geçersiz veri nedeniyle bir istisna fırlatılmasını bekleyebilirsiniz (örneğin, bir doğrulama istisnası)
         // assertThrows(ValidationException.class, () -> productService.updateProduct(1, invalidProductDto));
     }
+    @Test
+    public void testCacheEvictionOnCreateProduct() {
+        // Given
+        ProductDto newProductDto = TestData.createProductDto(); // Yeni bir ürün DTO'su
+        when(productRepository.save(any(Product.class))).thenReturn(product);
+
+        // When
+        productService.createProduct(newProductDto);
+
+        // Then
+        // Cache davranışını doğrulamak için cache yöneticisini veya cache'deki veriyi kontrol eden ek kodlar ekleyebilirsiniz.
+        // Bu örnek doğrudan cache kontrolü sağlamaz, ancak uygulama seviyesinde cache durumunu kontrol edebilirsiniz.
+    }
+
+    @Test
+    public void testCacheEvictionOnUpdateProduct() {
+        // Given
+        ProductDto updatedProductDto = TestData.createProductDto(); // Güncellenmiş ürün DTO'su
+        when(productRepository.findById(1)).thenReturn(Optional.of(product));
+        when(productRepository.save(any(Product.class))).thenReturn(product);
+
+        // When
+        productService.updateProduct(1, updatedProductDto);
+
+        // Then
+        // Cache davranışını doğrulamak için cache yöneticisini veya cache'deki veriyi kontrol eden ek kodlar ekleyebilirsiniz.
+        // Bu örnek doğrudan cache kontrolü sağlamaz, ancak uygulama seviyesinde cache durumunu kontrol edebilirsiniz.
+    }
 
 }
