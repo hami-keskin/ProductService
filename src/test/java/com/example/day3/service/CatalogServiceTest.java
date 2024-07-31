@@ -194,5 +194,17 @@ public class CatalogServiceTest {
         // Cache'in güncellenip güncellenmediğini kontrol edin.
         // Bu genellikle cache'e dair doğrudan bir kontrol veya cache yöneticisinin işleyişini doğrulayan testler ile yapılabilir.
     }
+    @Test
+    public void testCacheEvictionOnDeleteCatalog() {
+        // Given
+        // Mevcut cache verilerini kontrol etmeden önce bir katalog silme işlemi yapılır.
+
+        // When
+        catalogService.deleteCatalog(1);
+
+        // Then
+        // Belirli bir katalog ID'si için cache'deki verinin temizlendiğini doğrulayın.
+        // Bu doğrudan cache kontrolü veya cache yöneticisinin işleyişini doğrulayan testlerle yapılabilir.
+    }
 
 }
