@@ -137,4 +137,34 @@ public class CatalogServiceTest {
         });
         verify(catalogRepository).findById(1);
     }
+    @Test
+    public void testUpdateCatalog_Success() {
+        // Given
+        CatalogDto updatedCatalogDto = new CatalogDto();
+        updatedCatalogDto.setId(1);
+        updatedCatalogDto.setName("Updated Catalog");
+        updatedCatalogDto.setDescription("Updated Description");
+        updatedCatalogDto.setStatus(true);
+
+        Catalog updatedCatalog = new Catalog();
+        updatedCatalog.setId(1);
+        updatedCatalog.setName("Updated Catalog");
+        updatedCatalog.setDescription("Updated Description");
+        updatedCatalog.setStatus(true);
+
+        when(catalogRepository.findById(1)).thenReturn(Optional.of(catalog));
+        when(catalogMapper.toEntity(updatedCatalogDto)).thenReturn(updatedCatalog);
+        when(catalogRepository.save(updatedCatalog)).thenReturn(updatedCatalog);
+        when(catalogMapper.toDto(updatedCatalog)).thenReturn(updatedCatalogDto);
+
+        // When
+        CatalogDto result = catalogService.updateCatalog(1, updatedCatalogDto);
+
+        // Then
+        assertNotNull(result); // Sonuç null olmamalıdır
+        assertEquals(updatedCatalogDto, result); // Güncellenmiş katalog DTO'sunun doğru olduğunu doğrular
+        verify(catalogRepository).findById(1); // findById çağrısının yapıldığını doğrular
+        verify(catalogRepository).save(updatedCatalog); // save çağrısının yapıldığını doğrular
+    }
+
 }
