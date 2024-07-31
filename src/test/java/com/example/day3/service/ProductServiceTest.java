@@ -208,5 +208,33 @@ public class ProductServiceTest {
         // Cache davranışını doğrulamak için cache yöneticisini veya cache'deki veriyi kontrol eden ek kodlar ekleyebilirsiniz.
         // Bu örnek doğrudan cache kontrolü sağlamaz, ancak uygulama seviyesinde cache durumunu kontrol edebilirsiniz.
     }
+    @Test
+    public void testTransactionOnCreateProduct() {
+        // Given
+        ProductDto newProductDto = TestData.createProductDto(); // Yeni bir ürün DTO'su
+        when(productRepository.save(any(Product.class))).thenReturn(product);
+
+        // When
+        ProductDto result = productService.createProduct(newProductDto);
+
+        // Then
+        // Veritabanı işlemlerinin düzgün şekilde yapıldığını kontrol edebilirsiniz.
+        // Örneğin, veritabanı kaydının gerçekten yapılıp yapılmadığını doğrulayabilirsiniz.
+    }
+
+    @Test
+    public void testTransactionOnUpdateProduct() {
+        // Given
+        ProductDto updatedProductDto = TestData.createProductDto(); // Güncellenmiş ürün DTO'su
+        when(productRepository.findById(1)).thenReturn(Optional.of(product));
+        when(productRepository.save(any(Product.class))).thenReturn(product);
+
+        // When
+        ProductDto result = productService.updateProduct(1, updatedProductDto);
+
+        // Then
+        // Veritabanı işlemlerinin düzgün şekilde yapıldığını kontrol edebilirsiniz.
+        // Örneğin, veritabanı kaydının gerçekten güncellendiğini doğrulayabilirsiniz.
+    }
 
 }
