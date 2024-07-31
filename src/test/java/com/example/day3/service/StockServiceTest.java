@@ -2,8 +2,8 @@ package com.example.day3.service;
 
 import com.example.day3.dto.StockDto;
 import com.example.day3.entity.Stock;
-import com.example.day3.mapper.StockMapper;
 import com.example.day3.repository.StockRepository;
+import com.example.day3.util.TestDataStock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,14 +35,8 @@ public class StockServiceTest {
 
     @BeforeEach
     void setUp() {
-        stock = new Stock();
-        stock.setId(1);
-        stock.setQuantity(10);
-
-        stockDto = new StockDto();
-        stockDto.setId(1);
-        stockDto.setProductId(1);
-        stockDto.setQuantity(10);
+        stock = TestDataStock.createStock();
+        stockDto = TestDataStock.createStockDto();
     }
 
     @Test

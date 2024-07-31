@@ -2,8 +2,8 @@ package com.example.day3.service;
 
 import com.example.day3.dto.ProductDto;
 import com.example.day3.entity.Product;
-import com.example.day3.mapper.ProductMapper;
 import com.example.day3.repository.ProductRepository;
+import com.example.day3.util.TestDataProduct;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,19 +35,8 @@ public class ProductServiceTest {
 
     @BeforeEach
     void setUp() {
-        product = new Product();
-        product.setId(1);
-        product.setName("Laptop");
-        product.setPrice(1000.0);
-        product.setDescription("Gaming Laptop");
-        product.setStatus(true);
-
-        productDto = new ProductDto();
-        productDto.setId(1);
-        productDto.setName("Laptop");
-        productDto.setPrice(1000.0);
-        productDto.setDescription("Gaming Laptop");
-        productDto.setStatus(true);
+        product = TestDataProduct.createProduct();
+        productDto = TestDataProduct.createProductDto();
     }
 
     @Test

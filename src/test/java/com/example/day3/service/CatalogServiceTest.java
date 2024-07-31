@@ -2,8 +2,8 @@ package com.example.day3.service;
 
 import com.example.day3.dto.CatalogDto;
 import com.example.day3.entity.Catalog;
-import com.example.day3.mapper.CatalogMapper;
 import com.example.day3.repository.CatalogRepository;
+import com.example.day3.util.TestDataCatalog;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,17 +35,8 @@ public class CatalogServiceTest {
 
     @BeforeEach
     void setUp() {
-        catalog = new Catalog();
-        catalog.setId(1);
-        catalog.setName("Electronics");
-        catalog.setDescription("Electronic items");
-        catalog.setStatus(true);
-
-        catalogDto = new CatalogDto();
-        catalogDto.setId(1);
-        catalogDto.setName("Electronics");
-        catalogDto.setDescription("Electronic items");
-        catalogDto.setStatus(true);
+        catalog = TestDataCatalog.createCatalog();
+        catalogDto = TestDataCatalog.createCatalogDto();
     }
 
     @Test
