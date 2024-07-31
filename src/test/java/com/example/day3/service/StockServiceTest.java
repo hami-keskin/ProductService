@@ -198,5 +198,17 @@ public class StockServiceTest {
         // Veritabanı işlemlerinin düzgün şekilde yapıldığını kontrol edebilirsiniz.
         // Örneğin, veritabanı kaydının gerçekten güncellendiğini doğrulayabilirsiniz.
     }
+    @Test
+    public void testGetAllStocks_NoStocks() {
+        // Given
+        when(stockRepository.findAll()).thenReturn(List.of());
+
+        // When
+        List<StockDto> result = stockService.getAllStocks();
+
+        // Then
+        assertTrue(result.isEmpty());
+        verify(stockRepository).findAll();
+    }
 
 }
