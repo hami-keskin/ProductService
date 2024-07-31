@@ -1,63 +1,68 @@
 package com.example.day3.service;
 
-import com.example.day3.dto.CatalogDto;
-import com.example.day3.dto.ProductDto;
-import com.example.day3.dto.StockDto;
 import com.example.day3.entity.Catalog;
 import com.example.day3.entity.Product;
 import com.example.day3.entity.Stock;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TestData {
 
-    public static CatalogDto createCatalogDto() {
-        CatalogDto dto = new CatalogDto();
-        dto.setId(1);
-        dto.setName("Test Catalog");
-        dto.setDescription("Test Description");
-        dto.setStatus(true);
-        return dto;
-    }
-
-    public static Catalog createCatalog() {
+    public static Catalog createCatalog(Integer id, String name, String description, Boolean status, List<Product> products) {
         Catalog catalog = new Catalog();
-        catalog.setId(1);
-        catalog.setName("Test Catalog");
-        catalog.setDescription("Test Description");
-        catalog.setStatus(true);
+        catalog.setId(id);
+        catalog.setName(name);
+        catalog.setDescription(description);
+        catalog.setStatus(status);
+        catalog.setProducts(products);
         return catalog;
     }
 
-    public static ProductDto createProductDto() {
-        ProductDto dto = new ProductDto();
-        dto.setId(1);
-        dto.setName("Test Product");
-        dto.setPrice(100.0);
-        dto.setDescription("Test Description");
-        dto.setStatus(true);
-        return dto;
-    }
-
-    public static Product createProduct() {
+    public static Product createProduct(Integer id, String name, Double price, String description, Boolean status, Catalog catalog, Stock stock) {
         Product product = new Product();
-        product.setId(1);
-        product.setName("Test Product");
-        product.setPrice(100.0);
-        product.setDescription("Test Description");
-        product.setStatus(true);
+        product.setId(id);
+        product.setName(name);
+        product.setPrice(price);
+        product.setDescription(description);
+        product.setStatus(status);
+        product.setCatalog(catalog);
+        product.setStock(stock);
         return product;
     }
 
-    public static StockDto createStockDto() {
-        StockDto dto = new StockDto();
-        dto.setId(1);
-        dto.setQuantity(10);
-        return dto;
+    public static Stock createStock(Integer id, Product product, Integer quantity) {
+        Stock stock = new Stock();
+        stock.setId(id);
+        stock.setProduct(product);
+        stock.setQuantity(quantity);
+        return stock;
     }
 
-    public static Stock createStock() {
-        Stock stock = new Stock();
-        stock.setId(1);
-        stock.setQuantity(10);
-        return stock;
+    public static List<Catalog> createCatalogList() {
+        List<Catalog> catalogs = new ArrayList<>();
+        List<Product> products = createProductList();
+        catalogs.add(createCatalog(1, "Electronics", "Various electronic products", true, products));
+        catalogs.add(createCatalog(2, "Books", "Various books", true, null));
+        return catalogs;
+    }
+
+    public static List<Product> createProductList() {
+        List<Product> products = new ArrayList<>();
+        Catalog catalog = createCatalog(1, "Electronics", "Various electronic products", true, null);
+
+        products.add(createProduct(1, "Laptop", 1200.0, "A high-end laptop", true, catalog, null));
+        products.add(createProduct(2, "Smartphone", 800.0, "A latest model smartphone", true, catalog, null));
+        return products;
+    }
+
+    public static List<Stock> createStockList() {
+        List<Stock> stocks = new ArrayList<>();
+        Product product1 = createProduct(1, "Laptop", 1200.0, "A high-end laptop", true, null, null);
+        Product product2 = createProduct(2, "Smartphone", 800.0, "A latest model smartphone", true, null, null);
+
+        stocks.add(createStock(1, product1, 50));
+        stocks.add(createStock(2, product2, 200));
+        return stocks;
     }
 }
