@@ -236,5 +236,17 @@ public class ProductServiceTest {
         // Veritabanı işlemlerinin düzgün şekilde yapıldığını kontrol edebilirsiniz.
         // Örneğin, veritabanı kaydının gerçekten güncellendiğini doğrulayabilirsiniz.
     }
+    @Test
+    public void testGetProductsByCatalogId_NoProducts() {
+        // Given
+        when(productRepository.findByCatalogId(1)).thenReturn(List.of());
+
+        // When
+        List<ProductDto> result = productService.getProductsByCatalogId(1);
+
+        // Then
+        assertTrue(result.isEmpty());
+        verify(productRepository).findByCatalogId(1);
+    }
 
 }
