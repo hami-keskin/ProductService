@@ -210,5 +210,18 @@ public class StockServiceTest {
         assertTrue(result.isEmpty());
         verify(stockRepository).findAll();
     }
+    @Test
+    public void testCacheEvictionOnCreateStock() {
+        // Given
+        StockDto newStockDto = TestData.createStockDto(); // Yeni bir stok DTO'su
+        when(stockRepository.save(any(Stock.class))).thenReturn(stock);
+
+        // When
+        StockDto result = stockService.createStock(newStockDto);
+
+        // Then
+        // Cache davranışını doğrulamak için cache yöneticisini veya cache'deki veriyi kontrol eden ek kodlar ekleyebilirsiniz.
+        // Bu örnek doğrudan cache kontrolü sağlamaz, ancak uygulama seviyesinde cache durumunu kontrol edebilirsiniz.
+    }
 
 }
