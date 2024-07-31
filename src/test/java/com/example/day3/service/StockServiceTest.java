@@ -9,9 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,83 +21,93 @@ public class StockServiceTest {
     @Mock
     private StockRepository stockRepository;
 
+    @Mock
+    private StockMapper stockMapper;
+
     @InjectMocks
     private StockService stockService;
+
+    private StockDto stockDto;
+    private Stock stock;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+        stockDto = TestData.createStockDto();
+        stock = TestData.createStock();
+        when(stockMapper.toDto(stock)).thenReturn(stockDto);
+        when(stockMapper.toEntity(stockDto)).thenReturn(stock);
     }
 
     @Test
     public void testGetAllStocks() {
         // Given
-        Stock stock = new Stock();
-        stock.setId(1);
-        stock.setQuantity(100);
-        StockDto stockDto = StockMapper.INSTANCE.toDto(stock);
-        when(stockRepository.findAll()).thenReturn(Arrays.asList(stock));
+        when(stockRepository.findAll()).thenReturn(List.of(stock));
 
         // When
-        var result = stockService.getAllStocks();
+        List<StockDto> result = stockService.getAllStocks();
 
         // Then
-        verify(stockRepository, times(1)).findAll();
         assertEquals(1, result.size());
-        assertEquals(stockDto.getQuantity(), result.get(0).getQuantity());
+        assertEquals(stockDto, result.get(0));
+        verify(stockRepository).findAll();
     }
 
     @Test
-    public void testGetStockById() {
+    public void testGetStockById_Success() {
         // Given
-        Stock stock = new Stock();
-        stock.setId(1);
-        stock.setQuantity(100);
-        StockDto stockDto = StockMapper.INSTANCE.toDto(stock);
         when(stockRepository.findById(1)).thenReturn(Optional.of(stock));
 
         // When
-        var result = stockService.getStockById(1);
+        StockDto result = stockService.getStockById(1);
 
         // Then
-        verify(stockRepository, times(1)).findById(1);
-        assertEquals(stockDto.getQuantity(), result.getQuantity());
+        assertEquals(stockDto, result);
+        verify(stockRepository).findById(1);
+    }
+
+    @Test
+    public void testGetStockById_NotFound() {
+        // Given
+        when(stockRepository.findById(1)).thenReturn(Optional.empty());
+
+        // When
+        StockDto result = stockService.getStockById(1);
+
+        // Then
+        assertNull(result);
+        verify(stockRepository).findById(1);
     }
 
     @Test
     public void testCreateStock() {
         // Given
-        StockDto stockDto = new StockDto();
-        stockDto.setQuantity(100);
-        Stock stock = StockMapper.INSTANCE.toEntity(stockDto);
-        when(stockRepository.save(stock)).thenReturn(stock);
+        when(stockRepository.save(any(Stock.class))).thenReturn(stock);
+        when(stockMapper.toDto(any(Stock.class))).thenReturn(stockDto);
+        when(stockMapper.toEntity(any(StockDto.class))).thenReturn(stock);
 
         // When
-        var result = stockService.createStock(stockDto);
+        StockDto result = stockService.createStock(stockDto);
 
         // Then
-        verify(stockRepository, times(1)).save(stock);
-        assertEquals(stockDto.getQuantity(), result.getQuantity());
+        assertNotNull(result); // Null olup olmadığını kontrol et
+        assertEquals(stockDto, result);
+        verify(stockRepository).save(any(Stock.class));
     }
 
     @Test
     public void testUpdateStock() {
         // Given
-        Stock stock = new Stock();
-        stock.setId(1);
-        stock.setQuantity(100);
-        StockDto stockDto = new StockDto();
-        stockDto.setQuantity(200);
         when(stockRepository.findById(1)).thenReturn(Optional.of(stock));
         when(stockRepository.save(stock)).thenReturn(stock);
 
         // When
-        var result = stockService.updateStock(1, stockDto);
+        StockDto result = stockService.updateStock(1, stockDto);
 
         // Then
-        verify(stockRepository, times(1)).findById(1);
-        verify(stockRepository, times(1)).save(stock);
-        assertEquals(stockDto.getQuantity(), result.getQuantity());
+        assertEquals(stockDto, result);
+        verify(stockRepository).findById(1);
+        verify(stockRepository).save(stock);
     }
 
     @Test
@@ -107,7 +116,7 @@ public class StockServiceTest {
         stockService.deleteStock(1);
 
         // Then
-        verify(stockRepository, times(1)).deleteById(1);
+        verify(stockRepository).deleteById(1);
     }
 
     @Test
@@ -116,36 +125,47 @@ public class StockServiceTest {
         stockService.deleteAllStocks();
 
         // Then
-        verify(stockRepository, times(1)).deleteAll();
+        verify(stockRepository).deleteAll();
     }
 
     @Test
-    public void testReduceStock() {
+    public void testReduceStock_Success() {
         // Given
-        Stock stock = new Stock();
-        stock.setId(1);
-        stock.setQuantity(100);
         when(stockRepository.findByProductId(1)).thenReturn(Optional.of(stock));
+        when(stockRepository.save(stock)).thenReturn(stock);
 
         // When
-        stockService.reduceStock(1, 50);
+        stockService.reduceStock(1, 5);
 
         // Then
-        verify(stockRepository, times(1)).findByProductId(1);
-        verify(stockRepository, times(1)).save(stock);
-        assertEquals(50, stock.getQuantity());
+        assertEquals(5, stock.getQuantity());
+        verify(stockRepository).findByProductId(1);
+        verify(stockRepository).save(stock);
     }
 
     @Test
-    public void testReduceStockNotEnough() {
+    public void testReduceStock_InsufficientStock() {
         // Given
-        Stock stock = new Stock();
-        stock.setId(1);
-        stock.setQuantity(10);
         when(stockRepository.findByProductId(1)).thenReturn(Optional.of(stock));
 
         // When & Then
-        RuntimeException thrown = assertThrows(RuntimeException.class, () -> stockService.reduceStock(1, 50));
-        assertEquals("Stokta yeterli ürün yok.", thrown.getMessage());
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            stockService.reduceStock(1, 15);
+        });
+        assertEquals("Stokta yeterli ürün yok.", exception.getMessage());
+        verify(stockRepository).findByProductId(1);
+    }
+
+    @Test
+    public void testReduceStock_NotFound() {
+        // Given
+        when(stockRepository.findByProductId(1)).thenReturn(Optional.empty());
+
+        // When & Then
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            stockService.reduceStock(1, 5);
+        });
+        assertEquals("Stok bulunamadı.", exception.getMessage());
+        verify(stockRepository).findByProductId(1);
     }
 }
