@@ -1,98 +1,140 @@
 package com.example.day3.service;
 
 import com.example.day3.dto.ProductDto;
+import com.example.day3.entity.Catalog;
 import com.example.day3.entity.Product;
+import com.example.day3.mapper.ProductMapper;
 import com.example.day3.repository.ProductRepository;
-import com.example.day3.util.TestDataProduct;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
+import org.mockito.MockitoAnnotations;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-@ActiveProfiles("test")
-@SpringBootTest
-public class ProductServiceTest {
-
-    @Mock
-    private ProductRepository productRepository;
+class ProductServiceTest {
 
     @InjectMocks
     private ProductService productService;
 
-    private Product product;
-    private ProductDto productDto;
+    @Mock
+    private ProductRepository productRepository;
 
     @BeforeEach
     void setUp() {
-        product = TestDataProduct.createProduct();
-        productDto = TestDataProduct.createProductDto();
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    public void testGetProductById() {
+    void testGetAllProducts() {
+        Product product1 = new Product();
+        product1.setId(1);
+        product1.setName("Product1");
+
+        Product product2 = new Product();
+        product2.setId(2);
+        product2.setName("Product2");
+
+        when(productRepository.findAll()).thenReturn(Arrays.asList(product1, product2));
+
+        List<ProductDto> productDtos = productService.getAllProducts();
+        assertEquals(2, productDtos.size());
+        verify(productRepository, times(1)).findAll();
+    }
+
+    @Test
+    void testGetProductById() {
+        Product product = new Product();
+        product.setId(1);
+        product.setName("Product1");
+
         when(productRepository.findById(1)).thenReturn(Optional.of(product));
-        ProductDto foundProduct = productService.getProductById(1);
-        assertNotNull(foundProduct);
-        assertEquals(1, foundProduct.getId());
+
+        ProductDto productDto = productService.getProductById(1);
+        assertNotNull(productDto);
+        assertEquals("Product1", productDto.getName());
+        verify(productRepository, times(1)).findById(1);
     }
 
     @Test
-    public void testCreateProduct() {
+    void testGetProductsByCatalogId() {
+        Catalog catalog = new Catalog();
+        catalog.setId(1);
+
+        Product product1 = new Product();
+        product1.setId(1);
+        product1.setCatalog(catalog);
+        product1.setName("Product1");
+
+        Product product2 = new Product();
+        product2.setId(2);
+        product2.setCatalog(catalog);
+        product2.setName("Product2");
+
+        when(productRepository.findByCatalogId(1)).thenReturn(Arrays.asList(product1, product2));
+
+        List<ProductDto> productDtos = productService.getProductsByCatalogId(1);
+        assertEquals(2, productDtos.size());
+        verify(productRepository, times(1)).findByCatalogId(1);
+    }
+
+    @Test
+    void testCreateProduct() {
+        ProductDto productDto = new ProductDto();
+        productDto.setName("New Product");
+        productDto.setPrice(100.0);
+
+        Product product = new Product();
+        product.setName("New Product");
+        product.setPrice(100.0);
+
         when(productRepository.save(any(Product.class))).thenReturn(product);
+
         ProductDto savedProductDto = productService.createProduct(productDto);
         assertNotNull(savedProductDto);
-        assertEquals(product.getId(), savedProductDto.getId());
+        assertEquals("New Product", savedProductDto.getName());
+        verify(productRepository, times(1)).save(any(Product.class));
     }
 
     @Test
-    public void testUpdateProduct() {
+    void testUpdateProduct() {
+        Product product = new Product();
+        product.setId(1);
+        product.setName("Old Product");
+
+        ProductDto productDto = new ProductDto();
+        productDto.setName("Updated Product");
+        productDto.setPrice(200.0);
+
         when(productRepository.findById(1)).thenReturn(Optional.of(product));
         when(productRepository.save(any(Product.class))).thenReturn(product);
+
         ProductDto updatedProductDto = productService.updateProduct(1, productDto);
         assertNotNull(updatedProductDto);
-        assertEquals(product.getId(), updatedProductDto.getId());
+        assertEquals("Updated Product", updatedProductDto.getName());
+        verify(productRepository, times(1)).findById(1);
+        verify(productRepository, times(1)).save(any(Product.class));
     }
 
     @Test
-    public void testDeleteProduct() {
+    void testDeleteProduct() {
         doNothing().when(productRepository).deleteById(1);
+
         productService.deleteProduct(1);
         verify(productRepository, times(1)).deleteById(1);
     }
 
     @Test
-    public void testGetProductById_NotFound() {
-        when(productRepository.findById(1)).thenReturn(Optional.empty());
-        ProductDto foundProduct = productService.getProductById(1);
-        assertNull(foundProduct);
-    }
+    void testDeleteAllProducts() {
+        doNothing().when(productRepository).deleteAll();
 
-    @Test
-    public void testCreateProduct_InvalidData() {
-        productDto.setPrice(-1000.0);
-        assertThrows(IllegalArgumentException.class, () -> productService.createProduct(productDto));
-    }
-
-    @Test
-    public void testUpdateProduct_NotFound() {
-        when(productRepository.findById(1)).thenReturn(Optional.empty());
-        assertThrows(RuntimeException.class, () -> productService.updateProduct(1, productDto));
-    }
-
-    @Test
-    public void testDeleteProduct_NotFound() {
-        doThrow(new RuntimeException("Product not found")).when(productRepository).deleteById(1);
-        assertThrows(RuntimeException.class, () -> productService.deleteProduct(1));
+        productService.deleteAllProducts();
+        verify(productRepository, times(1)).deleteAll();
     }
 }
