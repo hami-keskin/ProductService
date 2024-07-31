@@ -31,6 +31,9 @@ public class StockService {
 
     @Transactional
     public StockDto createStock(StockDto stockDto) {
+        if (stockDto.getQuantity() == null || stockDto.getQuantity() < 0) {
+            throw new IllegalArgumentException("Stock quantity must not be null or negative");
+        }
         Stock stock = StockMapper.INSTANCE.toEntity(stockDto);
         return StockMapper.INSTANCE.toDto(stockRepository.save(stock));
     }

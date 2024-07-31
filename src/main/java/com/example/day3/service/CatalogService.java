@@ -37,6 +37,9 @@ public class CatalogService {
     @Transactional
     @CacheEvict(value = "catalogs", allEntries = true)
     public CatalogDto createCatalog(CatalogDto catalogDto) {
+        if (catalogDto.getName() == null || catalogDto.getName().isEmpty()) {
+            throw new IllegalArgumentException("Catalog name must not be null or empty");
+        }
         Catalog catalog = CatalogMapper.INSTANCE.toEntity(catalogDto);
         return CatalogMapper.INSTANCE.toDto(catalogRepository.save(catalog));
     }

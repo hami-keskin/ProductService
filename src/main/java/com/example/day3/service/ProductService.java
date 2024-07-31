@@ -44,6 +44,9 @@ public class ProductService {
     @Transactional
     @CacheEvict(value = "products", allEntries = true)
     public ProductDto createProduct(ProductDto productDto) {
+        if (productDto.getPrice() == null || productDto.getPrice() < 0) {
+            throw new IllegalArgumentException("Product price must not be null or negative");
+        }
         Product product = ProductMapper.INSTANCE.toEntity(productDto);
         return ProductMapper.INSTANCE.toDto(productRepository.save(product));
     }
