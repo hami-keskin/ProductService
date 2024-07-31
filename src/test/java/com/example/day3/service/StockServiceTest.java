@@ -223,5 +223,17 @@ public class StockServiceTest {
         // Cache davranışını doğrulamak için cache yöneticisini veya cache'deki veriyi kontrol eden ek kodlar ekleyebilirsiniz.
         // Bu örnek doğrudan cache kontrolü sağlamaz, ancak uygulama seviyesinde cache durumunu kontrol edebilirsiniz.
     }
+    @Test
+    public void testReduceStock_ThrowsExceptionForInvalidProductId() {
+        // Given
+        when(stockRepository.findByProductId(1)).thenReturn(Optional.empty());
+
+        // When & Then
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            stockService.reduceStock(1, 5);
+        });
+        assertEquals("Stok bulunamadı.", exception.getMessage());
+        verify(stockRepository).findByProductId(1);
+    }
 
 }
