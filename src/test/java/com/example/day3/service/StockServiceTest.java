@@ -170,4 +170,33 @@ public class StockServiceTest {
         assertEquals("Stok bulunamadı.", exception.getMessage());
         verify(stockRepository).findByProductId(1);
     }
+    @Test
+    public void testTransactionOnCreateStock() {
+        // Given
+        StockDto newStockDto = TestData.createStockDto(); // Yeni bir stok DTO'su
+        when(stockRepository.save(any(Stock.class))).thenReturn(stock);
+
+        // When
+        StockDto result = stockService.createStock(newStockDto);
+
+        // Then
+        // Veritabanı işlemlerinin düzgün şekilde yapıldığını kontrol edebilirsiniz.
+        // Örneğin, veritabanı kaydının gerçekten yapılıp yapılmadığını doğrulayabilirsiniz.
+    }
+
+    @Test
+    public void testTransactionOnUpdateStock() {
+        // Given
+        StockDto updatedStockDto = TestData.createStockDto(); // Güncellenmiş stok DTO'su
+        when(stockRepository.findById(1)).thenReturn(Optional.of(stock));
+        when(stockRepository.save(any(Stock.class))).thenReturn(stock);
+
+        // When
+        StockDto result = stockService.updateStock(1, updatedStockDto);
+
+        // Then
+        // Veritabanı işlemlerinin düzgün şekilde yapıldığını kontrol edebilirsiniz.
+        // Örneğin, veritabanı kaydının gerçekten güncellendiğini doğrulayabilirsiniz.
+    }
+
 }
