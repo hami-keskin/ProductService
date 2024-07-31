@@ -154,4 +154,31 @@ public class ProductServiceTest {
         });
         verify(productRepository).findById(1);
     }
+    @Test
+    public void testCreateProduct_InvalidData() {
+        // Given
+        ProductDto invalidProductDto = new ProductDto(); // Geçersiz veriler (örneğin, eksik veya hatalı alanlar)
+
+        // When
+        ProductDto result = productService.createProduct(invalidProductDto);
+
+        // Then
+        // Geçersiz veri nedeniyle bir istisna fırlatılmasını bekleyebilirsiniz (örneğin, bir doğrulama istisnası)
+        // assertThrows(ValidationException.class, () -> productService.createProduct(invalidProductDto));
+    }
+
+    @Test
+    public void testUpdateProduct_InvalidData() {
+        // Given
+        ProductDto invalidProductDto = new ProductDto(); // Geçersiz veriler (örneğin, eksik veya hatalı alanlar)
+        when(productRepository.findById(1)).thenReturn(Optional.of(product));
+
+        // When
+        ProductDto result = productService.updateProduct(1, invalidProductDto);
+
+        // Then
+        // Geçersiz veri nedeniyle bir istisna fırlatılmasını bekleyebilirsiniz (örneğin, bir doğrulama istisnası)
+        // assertThrows(ValidationException.class, () -> productService.updateProduct(1, invalidProductDto));
+    }
+
 }
