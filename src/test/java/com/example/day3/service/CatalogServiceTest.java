@@ -206,5 +206,33 @@ public class CatalogServiceTest {
         // Belirli bir katalog ID'si için cache'deki verinin temizlendiğini doğrulayın.
         // Bu doğrudan cache kontrolü veya cache yöneticisinin işleyişini doğrulayan testlerle yapılabilir.
     }
+    @Test
+    public void testCreateCatalog_ThrowsExceptionOnDatabaseError() {
+        // Given
+        when(catalogRepository.save(any(Catalog.class))).thenThrow(new RuntimeException("Database error"));
+
+        // When
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            catalogService.createCatalog(catalogDto);
+        });
+
+        // Then
+        assertEquals("Database error", exception.getMessage());
+    }
+
+    @Test
+    public void testUpdateCatalog_ThrowsExceptionOnDatabaseError() {
+        // Given
+        when(catalogRepository.findById(1)).thenReturn(Optional.of(catalog));
+        when(catalogRepository.save(any(Catalog.class))).thenThrow(new RuntimeException("Database error"));
+
+        // When
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            catalogService.updateCatalog(1, catalogDto);
+        });
+
+        // Then
+        assertEquals("Database error", exception.getMessage());
+    }
 
 }
