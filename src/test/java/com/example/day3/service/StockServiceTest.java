@@ -90,7 +90,7 @@ public class StockServiceTest {
         StockDto result = stockService.createStock(stockDto);
 
         // Then
-        assertNotNull(result); // Null olup olmadığını kontrol et
+        assertNotNull(result);
         assertEquals(stockDto, result);
         verify(stockRepository).save(any(Stock.class));
     }
@@ -131,6 +131,7 @@ public class StockServiceTest {
     @Test
     public void testReduceStock_Success() {
         // Given
+        stock.setQuantity(10);
         when(stockRepository.findByProductId(1)).thenReturn(Optional.of(stock));
         when(stockRepository.save(stock)).thenReturn(stock);
 
@@ -146,6 +147,7 @@ public class StockServiceTest {
     @Test
     public void testReduceStock_InsufficientStock() {
         // Given
+        stock.setQuantity(10);
         when(stockRepository.findByProductId(1)).thenReturn(Optional.of(stock));
 
         // When & Then

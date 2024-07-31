@@ -13,6 +13,7 @@ import org.springframework.cache.CacheManager;
 import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -125,5 +126,17 @@ public class CatalogServiceTest {
 
         // Then
         verify(catalogRepository).deleteAll();
+    }
+
+    @Test
+    public void testUpdateCatalog_NotFound() {
+        // Given
+        when(catalogRepository.findById(1)).thenReturn(Optional.empty());
+
+        // When & Then
+        Exception exception = assertThrows(NoSuchElementException.class, () -> {
+            catalogService.updateCatalog(1, catalogDto);
+        });
+        verify(catalogRepository).findById(1);
     }
 }

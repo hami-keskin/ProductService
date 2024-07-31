@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -104,7 +105,7 @@ public class ProductServiceTest {
         ProductDto result = productService.createProduct(productDto);
 
         // Then
-        assertNotNull(result); // Null olup olmadığını kontrol et
+        assertNotNull(result);
         assertEquals(productDto, result);
         verify(productRepository).save(any(Product.class));
     }
@@ -140,5 +141,17 @@ public class ProductServiceTest {
 
         // Then
         verify(productRepository).deleteAll();
+    }
+
+    @Test
+    public void testUpdateProduct_NotFound() {
+        // Given
+        when(productRepository.findById(1)).thenReturn(Optional.empty());
+
+        // When & Then
+        Exception exception = assertThrows(NoSuchElementException.class, () -> {
+            productService.updateProduct(1, productDto);
+        });
+        verify(productRepository).findById(1);
     }
 }
