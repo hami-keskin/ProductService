@@ -10,21 +10,23 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-class ProductServiceTest {
-
-    @InjectMocks
-    private ProductService productService;
+@SpringBootTest
+public class ProductServiceTest {
 
     @Mock
     private ProductRepository productRepository;
+
+    @InjectMocks
+    private ProductService productService;
 
     @BeforeEach
     void setUp() {
@@ -33,53 +35,35 @@ class ProductServiceTest {
 
     @Test
     void testGetAllProducts() {
-        Product product1 = new Product();
-        product1.setId(1);
-        product1.setName("Product1");
-
-        Product product2 = new Product();
-        product2.setId(2);
-        product2.setName("Product2");
-
-        when(productRepository.findAll()).thenReturn(Arrays.asList(product1, product2));
+        List<Product> products = TestData.getSampleProducts(null);
+        when(productRepository.findAll()).thenReturn(products);
 
         List<ProductDto> productDtos = productService.getAllProducts();
+
         assertEquals(2, productDtos.size());
         verify(productRepository, times(1)).findAll();
     }
 
     @Test
     void testGetProductById() {
-        Product product = new Product();
-        product.setId(1);
-        product.setName("Product1");
-
+        Product product = TestData.createProduct(1, "Laptop", 1200.00, "High-end gaming laptop", true, null, null);
         when(productRepository.findById(1)).thenReturn(Optional.of(product));
 
         ProductDto productDto = productService.getProductById(1);
+
         assertNotNull(productDto);
-        assertEquals("Product1", productDto.getName());
+        assertEquals("Laptop", productDto.getName());
         verify(productRepository, times(1)).findById(1);
     }
 
     @Test
     void testGetProductsByCatalogId() {
-        Catalog catalog = new Catalog();
-        catalog.setId(1);
-
-        Product product1 = new Product();
-        product1.setId(1);
-        product1.setCatalog(catalog);
-        product1.setName("Product1");
-
-        Product product2 = new Product();
-        product2.setId(2);
-        product2.setCatalog(catalog);
-        product2.setName("Product2");
-
-        when(productRepository.findByCatalogId(1)).thenReturn(Arrays.asList(product1, product2));
+        Catalog catalog = TestData.createCatalog(1, "Electronics", "Various electronic products", true, null);
+        List<Product> products = TestData.getSampleProducts(catalog);
+        when(productRepository.findByCatalogId(1)).thenReturn(products);
 
         List<ProductDto> productDtos = productService.getProductsByCatalogId(1);
+
         assertEquals(2, productDtos.size());
         verify(productRepository, times(1)).findByCatalogId(1);
     }
@@ -89,35 +73,37 @@ class ProductServiceTest {
         ProductDto productDto = new ProductDto();
         productDto.setName("New Product");
         productDto.setPrice(100.0);
+        productDto.setDescription("New Description");
+        productDto.setStatus(true);
 
-        Product product = new Product();
-        product.setName("New Product");
-        product.setPrice(100.0);
-
+        Product product = ProductMapper.INSTANCE.toEntity(productDto);
         when(productRepository.save(any(Product.class))).thenReturn(product);
 
-        ProductDto savedProductDto = productService.createProduct(productDto);
-        assertNotNull(savedProductDto);
-        assertEquals("New Product", savedProductDto.getName());
+        ProductDto createdProduct = productService.createProduct(productDto);
+
+        assertNotNull(createdProduct);
+        assertEquals("New Product", createdProduct.getName());
         verify(productRepository, times(1)).save(any(Product.class));
     }
 
     @Test
     void testUpdateProduct() {
-        Product product = new Product();
-        product.setId(1);
-        product.setName("Old Product");
+        Product product = TestData.createProduct(1, "Old Name", 100.0, "Old Description", true, null, null);
+        when(productRepository.findById(1)).thenReturn(Optional.of(product));
 
         ProductDto productDto = new ProductDto();
-        productDto.setName("Updated Product");
+        productDto.setName("Updated Name");
         productDto.setPrice(200.0);
+        productDto.setDescription("Updated Description");
+        productDto.setStatus(true);
 
-        when(productRepository.findById(1)).thenReturn(Optional.of(product));
-        when(productRepository.save(any(Product.class))).thenReturn(product);
+        Product updatedProduct = ProductMapper.INSTANCE.toEntity(productDto);
+        when(productRepository.save(any(Product.class))).thenReturn(updatedProduct);
 
-        ProductDto updatedProductDto = productService.updateProduct(1, productDto);
-        assertNotNull(updatedProductDto);
-        assertEquals("Updated Product", updatedProductDto.getName());
+        ProductDto result = productService.updateProduct(1, productDto);
+
+        assertNotNull(result);
+        assertEquals("Updated Name", result.getName());
         verify(productRepository, times(1)).findById(1);
         verify(productRepository, times(1)).save(any(Product.class));
     }
@@ -127,6 +113,7 @@ class ProductServiceTest {
         doNothing().when(productRepository).deleteById(1);
 
         productService.deleteProduct(1);
+
         verify(productRepository, times(1)).deleteById(1);
     }
 
@@ -135,6 +122,7 @@ class ProductServiceTest {
         doNothing().when(productRepository).deleteAll();
 
         productService.deleteAllProducts();
+
         verify(productRepository, times(1)).deleteAll();
     }
 }
