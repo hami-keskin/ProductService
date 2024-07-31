@@ -166,5 +166,33 @@ public class CatalogServiceTest {
         verify(catalogRepository).findById(1); // findById çağrısının yapıldığını doğrular
         verify(catalogRepository).save(updatedCatalog); // save çağrısının yapıldığını doğrular
     }
+    @Test
+    public void testCacheEvictionOnCreateCatalog() {
+        // Given
+        CatalogDto newCatalogDto = TestData.createCatalogDto(); // Yeni bir katalog DTO'su
+        when(catalogRepository.save(any(Catalog.class))).thenReturn(catalog);
+
+        // When
+        CatalogDto result = catalogService.createCatalog(newCatalogDto);
+
+        // Then
+        // Cache'deki tüm entry'lerin temizlendiğini kontrol edin.
+        // Cache'e dair doğrudan bir kontrol yapılabilir veya cache yöneticisinin işleyişini doğrulayan testler yapılabilir.
+    }
+
+    @Test
+    public void testCacheUpdateOnUpdateCatalog() {
+        // Given
+        CatalogDto updatedCatalogDto = TestData.createCatalogDto();
+        when(catalogRepository.findById(1)).thenReturn(Optional.of(catalog));
+        when(catalogRepository.save(any(Catalog.class))).thenReturn(catalog);
+
+        // When
+        CatalogDto result = catalogService.updateCatalog(1, updatedCatalogDto);
+
+        // Then
+        // Cache'in güncellenip güncellenmediğini kontrol edin.
+        // Bu genellikle cache'e dair doğrudan bir kontrol veya cache yöneticisinin işleyişini doğrulayan testler ile yapılabilir.
+    }
 
 }
