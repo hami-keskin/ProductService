@@ -9,21 +9,23 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-class CatalogServiceTest {
-
-    @InjectMocks
-    private CatalogService catalogService;
+@SpringBootTest
+public class CatalogServiceTest {
 
     @Mock
     private CatalogRepository catalogRepository;
+
+    @InjectMocks
+    private CatalogService catalogService;
 
     @BeforeEach
     void setUp() {
@@ -32,32 +34,24 @@ class CatalogServiceTest {
 
     @Test
     void testGetAllCatalogs() {
-        Catalog catalog1 = new Catalog();
-        catalog1.setId(1);
-        catalog1.setName("Catalog1");
-
-        Catalog catalog2 = new Catalog();
-        catalog2.setId(2);
-        catalog2.setName("Catalog2");
-
-        when(catalogRepository.findAll()).thenReturn(Arrays.asList(catalog1, catalog2));
+        List<Catalog> catalogs = TestData.getSampleCatalogs();
+        when(catalogRepository.findAll()).thenReturn(catalogs);
 
         List<CatalogDto> catalogDtos = catalogService.getAllCatalogs();
+
         assertEquals(2, catalogDtos.size());
         verify(catalogRepository, times(1)).findAll();
     }
 
     @Test
     void testGetCatalogById() {
-        Catalog catalog = new Catalog();
-        catalog.setId(1);
-        catalog.setName("Catalog1");
-
+        Catalog catalog = TestData.createCatalog(1, "Electronics", "Various electronic products", true, null);
         when(catalogRepository.findById(1)).thenReturn(Optional.of(catalog));
 
         CatalogDto catalogDto = catalogService.getCatalogById(1);
+
         assertNotNull(catalogDto);
-        assertEquals("Catalog1", catalogDto.getName());
+        assertEquals("Electronics", catalogDto.getName());
         verify(catalogRepository, times(1)).findById(1);
     }
 
@@ -65,33 +59,36 @@ class CatalogServiceTest {
     void testCreateCatalog() {
         CatalogDto catalogDto = new CatalogDto();
         catalogDto.setName("New Catalog");
+        catalogDto.setDescription("New Description");
+        catalogDto.setStatus(true);
 
-        Catalog catalog = new Catalog();
-        catalog.setName("New Catalog");
-
+        Catalog catalog = CatalogMapper.INSTANCE.toEntity(catalogDto);
         when(catalogRepository.save(any(Catalog.class))).thenReturn(catalog);
 
-        CatalogDto savedCatalogDto = catalogService.createCatalog(catalogDto);
-        assertNotNull(savedCatalogDto);
-        assertEquals("New Catalog", savedCatalogDto.getName());
+        CatalogDto createdCatalog = catalogService.createCatalog(catalogDto);
+
+        assertNotNull(createdCatalog);
+        assertEquals("New Catalog", createdCatalog.getName());
         verify(catalogRepository, times(1)).save(any(Catalog.class));
     }
 
     @Test
     void testUpdateCatalog() {
-        Catalog catalog = new Catalog();
-        catalog.setId(1);
-        catalog.setName("Old Catalog");
+        Catalog catalog = TestData.createCatalog(1, "Old Name", "Old Description", true, null);
+        when(catalogRepository.findById(1)).thenReturn(Optional.of(catalog));
 
         CatalogDto catalogDto = new CatalogDto();
-        catalogDto.setName("Updated Catalog");
+        catalogDto.setName("Updated Name");
+        catalogDto.setDescription("Updated Description");
+        catalogDto.setStatus(true);
 
-        when(catalogRepository.findById(1)).thenReturn(Optional.of(catalog));
-        when(catalogRepository.save(any(Catalog.class))).thenReturn(catalog);
+        Catalog updatedCatalog = CatalogMapper.INSTANCE.toEntity(catalogDto);
+        when(catalogRepository.save(any(Catalog.class))).thenReturn(updatedCatalog);
 
-        CatalogDto updatedCatalogDto = catalogService.updateCatalog(1, catalogDto);
-        assertNotNull(updatedCatalogDto);
-        assertEquals("Updated Catalog", updatedCatalogDto.getName());
+        CatalogDto result = catalogService.updateCatalog(1, catalogDto);
+
+        assertNotNull(result);
+        assertEquals("Updated Name", result.getName());
         verify(catalogRepository, times(1)).findById(1);
         verify(catalogRepository, times(1)).save(any(Catalog.class));
     }
@@ -101,6 +98,7 @@ class CatalogServiceTest {
         doNothing().when(catalogRepository).deleteById(1);
 
         catalogService.deleteCatalog(1);
+
         verify(catalogRepository, times(1)).deleteById(1);
     }
 
@@ -109,6 +107,7 @@ class CatalogServiceTest {
         doNothing().when(catalogRepository).deleteAll();
 
         catalogService.deleteAllCatalogs();
+
         verify(catalogRepository, times(1)).deleteAll();
     }
 }
