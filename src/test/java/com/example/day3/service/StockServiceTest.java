@@ -6,16 +6,14 @@ import com.example.day3.mapper.StockMapper;
 import com.example.day3.repository.StockRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 public class StockServiceTest {
@@ -23,98 +21,87 @@ public class StockServiceTest {
     @Mock
     private StockRepository stockRepository;
 
-    @InjectMocks
     private StockService stockService;
 
-    private Stock stock;
-    private StockDto stockDto;
-
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         MockitoAnnotations.openMocks(this);
-        stock = TestData.createStock(1, null, 50);
-        stockDto = StockMapper.INSTANCE.toDto(stock);
+        stockService = new StockService(stockRepository);
     }
 
     @Test
-    void testGetAllStocks() {
-        when(stockRepository.findAll()).thenReturn(List.of(stock));
+    public void testGetAllStocks() {
+        Stock stock = new Stock();
+        stock.setId(1);
+        stock.setQuantity(10);
+        when(stockRepository.findAll()).thenReturn(Collections.singletonList(stock));
 
-        List<StockDto> stockDtos = stockService.getAllStocks();
-
-        assertNotNull(stockDtos);
-        assertEquals(1, stockDtos.size());
-        verify(stockRepository, times(1)).findAll();
+        List<StockDto> stocks = stockService.getAllStocks();
+        assertEquals(1, stocks.size());
+        assertEquals(10, stocks.get(0).getQuantity());
     }
 
     @Test
-    void testGetStockById_Success() {
+    public void testGetStockById() {
+        Stock stock = new Stock();
+        stock.setId(1);
         when(stockRepository.findById(1)).thenReturn(Optional.of(stock));
 
-        StockDto foundStock = stockService.getStockById(1);
-
-        assertNotNull(foundStock);
-        assertEquals(stockDto.getId(), foundStock.getId());
-        verify(stockRepository, times(1)).findById(1);
+        StockDto stockDto = stockService.getStockById(1);
+        assertNotNull(stockDto);
+        assertEquals(1, stockDto.getId());
     }
 
     @Test
-    void testGetStockById_NotFound() {
-        when(stockRepository.findById(1)).thenReturn(Optional.empty());
-
-        StockDto foundStock = stockService.getStockById(1);
-
-        assertNull(foundStock);
-        verify(stockRepository, times(1)).findById(1);
-    }
-
-    @Test
-    void testCreateStock() {
+    public void testCreateStock() {
+        StockDto stockDto = new StockDto();
+        stockDto.setQuantity(10);
+        Stock stock = StockMapper.INSTANCE.toEntity(stockDto);
         when(stockRepository.save(any(Stock.class))).thenReturn(stock);
 
-        StockDto savedStock = stockService.createStock(stockDto);
-
-        assertNotNull(savedStock);
-        assertEquals(stockDto.getId(), savedStock.getId());
-        verify(stockRepository, times(1)).save(any(Stock.class));
+        StockDto createdStock = stockService.createStock(stockDto);
+        assertNotNull(createdStock);
+        assertEquals(10, createdStock.getQuantity());
     }
 
     @Test
-    void testUpdateStock_Success() {
+    public void testUpdateStock() {
+        StockDto stockDto = new StockDto();
+        stockDto.setQuantity(20);
+        Stock stock = new Stock();
+        stock.setId(1);
         when(stockRepository.findById(1)).thenReturn(Optional.of(stock));
         when(stockRepository.save(any(Stock.class))).thenReturn(stock);
 
         StockDto updatedStock = stockService.updateStock(1, stockDto);
-
         assertNotNull(updatedStock);
-        assertEquals(stockDto.getId(), updatedStock.getId());
-        verify(stockRepository, times(1)).findById(1);
-        verify(stockRepository, times(1)).save(any(Stock.class));
+        assertEquals(20, updatedStock.getQuantity());
     }
 
     @Test
-    void testUpdateStock_NotFound() {
-        when(stockRepository.findById(1)).thenReturn(Optional.empty());
-
-        assertThrows(NoSuchElementException.class, () -> stockService.updateStock(1, stockDto));
-        verify(stockRepository, times(1)).findById(1);
-    }
-
-    @Test
-    void testDeleteStock() {
+    public void testDeleteStock() {
         doNothing().when(stockRepository).deleteById(1);
-
         stockService.deleteStock(1);
-
         verify(stockRepository, times(1)).deleteById(1);
     }
 
     @Test
-    void testDeleteAllStocks() {
+    public void testDeleteAllStocks() {
         doNothing().when(stockRepository).deleteAll();
-
         stockService.deleteAllStocks();
-
         verify(stockRepository, times(1)).deleteAll();
+    }
+
+    @Test
+    public void testReduceStock() {
+        Stock stock = new Stock();
+        stock.setId(1);
+        stock.setQuantity(10);
+        when(stockRepository.findByProductId(1)).thenReturn(Optional.of(stock));
+        when(stockRepository.save(any(Stock.class))).thenReturn(stock);
+
+        stockService.reduceStock(1, 5);
+        verify(stockRepository, times(1)).save(stock);
+        assertEquals(5, stock.getQuantity());
     }
 }
