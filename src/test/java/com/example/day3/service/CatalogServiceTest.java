@@ -28,7 +28,12 @@ class CatalogServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        catalogService = new CatalogService(catalogRepository);
+        catalogService = new CatalogService(catalogRepository);  // Constructor injection
+    }
+
+    @Test
+    void testConstructorInjection() {
+        assertNotNull(catalogService);
     }
 
     @Test
