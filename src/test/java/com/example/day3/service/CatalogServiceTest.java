@@ -6,10 +6,8 @@ import com.example.day3.mapper.CatalogMapper;
 import com.example.day3.repository.CatalogRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,18 +16,18 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
 public class CatalogServiceTest {
 
     @Mock
     private CatalogRepository catalogRepository;
 
-    @InjectMocks
     private CatalogService catalogService;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        catalogService = new CatalogService();
+        catalogService.setCatalogRepository(catalogRepository);
     }
 
     @Test
