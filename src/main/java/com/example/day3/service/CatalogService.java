@@ -65,9 +65,4 @@ public class CatalogService {
     public void deleteAllCatalogs() {
         catalogRepository.deleteAll();
     }
-
-    // Setter for CatalogRepository to be used in tests
-    public void setCatalogRepository(CatalogRepository catalogRepository) {
-        this.catalogRepository = catalogRepository;
-    }
 }
