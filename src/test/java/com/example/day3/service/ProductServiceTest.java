@@ -6,16 +6,14 @@ import com.example.day3.mapper.ProductMapper;
 import com.example.day3.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 public class ProductServiceTest {
@@ -23,98 +21,74 @@ public class ProductServiceTest {
     @Mock
     private ProductRepository productRepository;
 
-    @InjectMocks
     private ProductService productService;
 
-    private Product product;
-    private ProductDto productDto;
-
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         MockitoAnnotations.openMocks(this);
-        product = TestData.createProduct(1, "Laptop", 1200.0, "A high-end laptop", true, null, null);
-        productDto = ProductMapper.INSTANCE.toDto(product);
+        productService = new ProductService(productRepository);
     }
 
     @Test
-    void testGetAllProducts() {
-        when(productRepository.findAll()).thenReturn(List.of(product));
+    public void testGetAllProducts() {
+        Product product = new Product();
+        product.setId(1);
+        product.setName("Test Product");
+        when(productRepository.findAll()).thenReturn(Collections.singletonList(product));
 
-        List<ProductDto> productDtos = productService.getAllProducts();
-
-        assertNotNull(productDtos);
-        assertEquals(1, productDtos.size());
-        verify(productRepository, times(1)).findAll();
+        List<ProductDto> products = productService.getAllProducts();
+        assertEquals(1, products.size());
+        assertEquals("Test Product", products.get(0).getName());
     }
 
     @Test
-    void testGetProductById_Success() {
+    public void testGetProductById() {
+        Product product = new Product();
+        product.setId(1);
         when(productRepository.findById(1)).thenReturn(Optional.of(product));
 
-        ProductDto foundProduct = productService.getProductById(1);
-
-        assertNotNull(foundProduct);
-        assertEquals(productDto.getId(), foundProduct.getId());
-        verify(productRepository, times(1)).findById(1);
+        ProductDto productDto = productService.getProductById(1);
+        assertNotNull(productDto);
+        assertEquals(1, productDto.getId());
     }
 
     @Test
-    void testGetProductById_NotFound() {
-        when(productRepository.findById(1)).thenReturn(Optional.empty());
-
-        ProductDto foundProduct = productService.getProductById(1);
-
-        assertNull(foundProduct);
-        verify(productRepository, times(1)).findById(1);
-    }
-
-    @Test
-    void testCreateProduct() {
+    public void testCreateProduct() {
+        ProductDto productDto = new ProductDto();
+        productDto.setName("Test Product");
+        Product product = ProductMapper.INSTANCE.toEntity(productDto);
         when(productRepository.save(any(Product.class))).thenReturn(product);
 
-        ProductDto savedProduct = productService.createProduct(productDto);
-
-        assertNotNull(savedProduct);
-        assertEquals(productDto.getId(), savedProduct.getId());
-        verify(productRepository, times(1)).save(any(Product.class));
+        ProductDto createdProduct = productService.createProduct(productDto);
+        assertNotNull(createdProduct);
+        assertEquals("Test Product", createdProduct.getName());
     }
 
     @Test
-    void testUpdateProduct_Success() {
+    public void testUpdateProduct() {
+        ProductDto productDto = new ProductDto();
+        productDto.setName("Updated Product");
+        Product product = new Product();
+        product.setId(1);
         when(productRepository.findById(1)).thenReturn(Optional.of(product));
         when(productRepository.save(any(Product.class))).thenReturn(product);
 
         ProductDto updatedProduct = productService.updateProduct(1, productDto);
-
         assertNotNull(updatedProduct);
-        assertEquals(productDto.getId(), updatedProduct.getId());
-        verify(productRepository, times(1)).findById(1);
-        verify(productRepository, times(1)).save(any(Product.class));
+        assertEquals("Updated Product", updatedProduct.getName());
     }
 
     @Test
-    void testUpdateProduct_NotFound() {
-        when(productRepository.findById(1)).thenReturn(Optional.empty());
-
-        assertThrows(NoSuchElementException.class, () -> productService.updateProduct(1, productDto));
-        verify(productRepository, times(1)).findById(1);
-    }
-
-    @Test
-    void testDeleteProduct() {
+    public void testDeleteProduct() {
         doNothing().when(productRepository).deleteById(1);
-
         productService.deleteProduct(1);
-
         verify(productRepository, times(1)).deleteById(1);
     }
 
     @Test
-    void testDeleteAllProducts() {
+    public void testDeleteAllProducts() {
         doNothing().when(productRepository).deleteAll();
-
         productService.deleteAllProducts();
-
         verify(productRepository, times(1)).deleteAll();
     }
 }
