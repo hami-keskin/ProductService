@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class StockService {
 
     @Autowired
-    private StockRepository stockRepository;
+    StockRepository stockRepository;
 
     public List<StockDto> getAllStocks() {
         return stockRepository.findAll().stream()
