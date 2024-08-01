@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class CatalogService {
 
     @Autowired
-    private CatalogRepository catalogRepository;
+    CatalogRepository catalogRepository;
 
     @Cacheable("catalogs")
     public List<CatalogDto> getAllCatalogs() {
