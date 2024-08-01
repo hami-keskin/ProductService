@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class ProductService {
 
     @Autowired
-    private ProductRepository productRepository;
+    ProductRepository productRepository;
 
     @Cacheable("products")
     public List<ProductDto> getAllProducts() {
