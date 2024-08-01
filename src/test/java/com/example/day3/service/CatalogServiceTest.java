@@ -6,8 +6,6 @@ import com.example.day3.mapper.CatalogMapper;
 import com.example.day3.repository.CatalogRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.List;
@@ -20,10 +18,7 @@ import static org.mockito.Mockito.*;
 
 public class CatalogServiceTest {
 
-    @Mock
     private CatalogRepository catalogRepository;
-
-    @InjectMocks
     private CatalogService catalogService;
 
     private Catalog catalog;
@@ -32,6 +27,8 @@ public class CatalogServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        catalogRepository = mock(CatalogRepository.class);
+        catalogService = new CatalogService(catalogRepository);
         catalog = TestData.createCatalog(1, "Electronics", "Various electronic products", true, null);
         catalogDto = CatalogMapper.INSTANCE.toDto(catalog);
     }
