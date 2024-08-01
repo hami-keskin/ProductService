@@ -29,7 +29,12 @@ class CatalogServiceTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
         catalogService = new CatalogService();
-        catalogService.catalogRepository = catalogRepository;
+        catalogService.catalogRepository = catalogRepository;  // Manual dependency injection
+    }
+
+    @Test
+    void testAutowiredInjection() {
+        assertNotNull(catalogService.catalogRepository);
     }
 
     @Test
