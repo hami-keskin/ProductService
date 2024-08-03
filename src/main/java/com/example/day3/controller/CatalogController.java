@@ -2,48 +2,40 @@ package com.example.day3.controller;
 
 import com.example.day3.dto.CatalogDto;
 import com.example.day3.service.CatalogService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/catalogs")
+@RequestMapping("/api/catalogs")
+@RequiredArgsConstructor
 public class CatalogController {
-
     private final CatalogService catalogService;
 
-    // Constructor injection
-    public CatalogController(CatalogService catalogService) {
-        this.catalogService = catalogService;
-    }
-
-    @GetMapping
-    public List<CatalogDto> getAllCatalogs() {
-        return catalogService.getAllCatalogs();
-    }
-
     @GetMapping("/{id}")
-    public CatalogDto getCatalogById(@PathVariable Integer id) {
-        return catalogService.getCatalogById(id);
+    public ResponseEntity<CatalogDto> getCatalogById(@PathVariable Integer id) {
+        Optional<CatalogDto> catalogDto = catalogService.getCatalogById(id);
+        return catalogDto.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public CatalogDto createCatalog(@RequestBody CatalogDto catalogDto) {
-        return catalogService.createCatalog(catalogDto);
+    public ResponseEntity<CatalogDto> createCatalog(@RequestBody CatalogDto catalogDto) {
+        CatalogDto createdCatalog = catalogService.createCatalog(catalogDto);
+        return ResponseEntity.ok(createdCatalog);
     }
 
     @PutMapping("/{id}")
-    public CatalogDto updateCatalog(@PathVariable Integer id, @RequestBody CatalogDto catalogDto) {
-        return catalogService.updateCatalog(id, catalogDto);
+    public ResponseEntity<CatalogDto> updateCatalog(@PathVariable Integer id, @RequestBody CatalogDto catalogDto) {
+        catalogDto.setId(id);
+        CatalogDto updatedCatalog = catalogService.updateCatalog(catalogDto);
+        return ResponseEntity.ok(updatedCatalog);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteCatalog(@PathVariable Integer id) {
+    public ResponseEntity<Void> deleteCatalog(@PathVariable Integer id) {
         catalogService.deleteCatalog(id);
-    }
-
-    @DeleteMapping
-    public void deleteAllCatalogs() {
-        catalogService.deleteAllCatalogs();
+        return ResponseEntity.noContent().build();
     }
 }

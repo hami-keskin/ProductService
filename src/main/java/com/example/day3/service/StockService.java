@@ -4,65 +4,48 @@ import com.example.day3.dto.StockDto;
 import com.example.day3.entity.Stock;
 import com.example.day3.mapper.StockMapper;
 import com.example.day3.repository.StockRepository;
+import jakarta.persistence.LockModeType;
+import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class StockService {
-
     private final StockRepository stockRepository;
+    private final StockMapper stockMapper;
+    private final EntityManager entityManager;
 
-    // Constructor injection
-    public StockService(StockRepository stockRepository) {
-        this.stockRepository = stockRepository;
-    }
-
-    public List<StockDto> getAllStocks() {
-        return stockRepository.findAll().stream()
-                .map(StockMapper.INSTANCE::toDto)
-                .collect(Collectors.toList());
-    }
-
-    public StockDto getStockById(Integer id) {
+    public Optional<StockDto> getStockById(Integer id) {
         return stockRepository.findById(id)
-                .map(StockMapper.INSTANCE::toDto)
-                .orElse(null);
+                .map(stockMapper::toDto);
     }
 
-    @Transactional
     public StockDto createStock(StockDto stockDto) {
-        Stock stock = StockMapper.INSTANCE.toEntity(stockDto);
-        return StockMapper.INSTANCE.toDto(stockRepository.save(stock));
+        Stock stock = stockMapper.toEntity(stockDto);
+        stock = stockRepository.save(stock);
+        return stockMapper.toDto(stock);
     }
 
-    @Transactional
-    public StockDto updateStock(Integer id, StockDto stockDto) {
-        Stock stock = stockRepository.findById(id).orElseThrow();
-        stock.setQuantity(stockDto.getQuantity());
-        return StockMapper.INSTANCE.toDto(stockRepository.save(stock));
+    public StockDto updateStock(StockDto stockDto) {
+        Stock stock = stockMapper.toEntity(stockDto);
+        stock = stockRepository.save(stock);
+        return stockMapper.toDto(stock);
     }
 
-    @Transactional
     public void deleteStock(Integer id) {
         stockRepository.deleteById(id);
     }
 
     @Transactional
-    public void deleteAllStocks() {
-        stockRepository.deleteAll();
-    }
-
-    @Transactional
     public void reduceStock(Integer productId, Integer quantity) {
-        Stock stock = stockRepository.findByProductId(productId)
-                .orElseThrow(() -> new RuntimeException("Stok bulunamadı."));
-        if (stock.getQuantity() < quantity) {
-            throw new RuntimeException("Stokta yeterli ürün yok.");
+        Stock stock = entityManager.find(Stock.class, productId, LockModeType.PESSIMISTIC_WRITE);
+        if (stock != null) {
+            stock.setQuantity(stock.getQuantity() - quantity);
+            stockRepository.save(stock);
         }
-        stock.setQuantity(stock.getQuantity() - quantity);
-        stockRepository.save(stock);
     }
 }

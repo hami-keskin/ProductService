@@ -6,8 +6,8 @@ import lombok.Data;
 public class ProductDto {
     private Integer id;
     private String name;
-    private Double price;
     private String description;
     private Boolean status;
+    private Double price;
     private Integer catalogId;
 }
