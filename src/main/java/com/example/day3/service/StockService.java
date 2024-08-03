@@ -4,8 +4,6 @@ import com.example.day3.dto.StockDto;
 import com.example.day3.entity.Stock;
 import com.example.day3.mapper.StockMapper;
 import com.example.day3.repository.StockRepository;
-import jakarta.persistence.LockModeType;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +15,6 @@ import java.util.Optional;
 public class StockService {
     private final StockRepository stockRepository;
     private final StockMapper stockMapper;
-    private final EntityManager entityManager;
 
     public Optional<StockDto> getStockById(Integer id) {
         return stockRepository.findById(id)
@@ -42,10 +39,10 @@ public class StockService {
 
     @Transactional
     public void reduceStock(Integer productId, Integer quantity) {
-        Stock stock = entityManager.find(Stock.class, productId, LockModeType.PESSIMISTIC_WRITE);
-        if (stock != null) {
+        Optional<Stock> optionalStock = stockRepository.findByProductIdWithLock(productId);
+        optionalStock.ifPresent(stock -> {
             stock.setQuantity(stock.getQuantity() - quantity);
             stockRepository.save(stock);
-        }
+        });
     }
 }

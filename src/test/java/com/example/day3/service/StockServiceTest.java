@@ -4,8 +4,6 @@ import com.example.day3.dto.StockDto;
 import com.example.day3.entity.Stock;
 import com.example.day3.mapper.StockMapper;
 import com.example.day3.repository.StockRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.LockModeType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -26,15 +24,12 @@ public class StockServiceTest {
     @Mock
     private StockMapper stockMapper;
 
-    @Mock
-    private EntityManager entityManager;
-
     private StockService stockService;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        stockService = new StockService(stockRepository, stockMapper, entityManager);
+        stockService = new StockService(stockRepository, stockMapper);
     }
 
     @Test
@@ -86,7 +81,7 @@ public class StockServiceTest {
         stock.setId(1);
         stock.setQuantity(100);
 
-        when(entityManager.find(Stock.class, 1, LockModeType.PESSIMISTIC_WRITE)).thenReturn(stock);
+        when(stockRepository.findByProductIdWithLock(1)).thenReturn(Optional.of(stock));
         when(stockRepository.save(stock)).thenReturn(stock);
 
         stockService.reduceStock(1, 10);
