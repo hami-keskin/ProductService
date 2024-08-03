@@ -10,7 +10,9 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -41,5 +43,13 @@ public class ProductService {
     @CacheEvict(value = "product", key = "#id")
     public void deleteProduct(Integer id) {
         productRepository.deleteById(id);
+    }
+
+    @Cacheable("productsByCatalog")
+    public List<ProductDto> getProductsByCatalogId(Integer catalogId) {
+        return productRepository.findByCatalogId(catalogId)
+                .stream()
+                .map(productMapper::toDto)
+                .collect(Collectors.toList());
     }
 }

@@ -155,6 +155,20 @@
             }
         },
         {
+            "name": "Get Products by Catalog ID",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "http://localhost:8080/api/products/catalog/1",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "8080",
+                    "path": ["api", "products", "catalog", "1"]
+                }
+            }
+        },
+        {
             "name": "Get Stock by ID",
             "request": {
                 "method": "GET",

@@ -10,7 +10,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -73,5 +76,22 @@ public class ProductServiceTest {
         doNothing().when(productRepository).deleteById(1);
         productService.deleteProduct(1);
         verify(productRepository, times(1)).deleteById(1);
+    }
+
+    @Test
+    void testGetProductsByCatalogId() {
+        Product product1 = new Product();
+        Product product2 = new Product();
+        ProductDto productDto1 = new ProductDto();
+        ProductDto productDto2 = new ProductDto();
+        List<Product> products = Stream.of(product1, product2).collect(Collectors.toList());
+        List<ProductDto> productDtos = Stream.of(productDto1, productDto2).collect(Collectors.toList());
+
+        when(productRepository.findByCatalogId(1)).thenReturn(products);
+        when(productMapper.toDto(product1)).thenReturn(productDto1);
+        when(productMapper.toDto(product2)).thenReturn(productDto2);
+
+        List<ProductDto> result = productService.getProductsByCatalogId(1);
+        assertEquals(productDtos, result);
     }
 }

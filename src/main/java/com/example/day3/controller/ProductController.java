@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -37,5 +38,11 @@ public class ProductController {
     public ResponseEntity<Void> deleteProduct(@PathVariable Integer id) {
         productService.deleteProduct(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/catalog/{catalogId}")
+    public ResponseEntity<List<ProductDto>> getProductsByCatalogId(@PathVariable Integer catalogId) {
+        List<ProductDto> products = productService.getProductsByCatalogId(catalogId);
+        return ResponseEntity.ok(products);
     }
 }
