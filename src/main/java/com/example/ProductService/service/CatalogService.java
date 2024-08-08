@@ -1,5 +1,6 @@
 package com.example.ProductService.service;
 
+import com.example.ProductService.annotation.RequestLogger;
 import com.example.ProductService.dto.CatalogDto;
 import com.example.ProductService.entity.Catalog;
 import com.example.ProductService.mapper.CatalogMapper;
@@ -14,6 +15,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@RequestLogger
 public class CatalogService {
     private final CatalogRepository catalogRepository;
     private final CatalogMapper catalogMapper;

@@ -1,5 +1,6 @@
 package com.example.ProductService.service;
 
+import com.example.ProductService.annotation.RequestLogger;
 import com.example.ProductService.dto.ProductDto;
 import com.example.ProductService.entity.Product;
 import com.example.ProductService.mapper.ProductMapper;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@RequestLogger
 public class ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
